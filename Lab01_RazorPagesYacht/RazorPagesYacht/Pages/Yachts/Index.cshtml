@@ -1,5 +1,5 @@
 @page
-@model RazorPagesYacht.Pages.YachtPages.IndexModel
+@model RazorPagesYacht.Pages.Yachts.IndexModel
 
 
 @{
@@ -11,6 +11,15 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+<form>
+    <p>
+        <select asp-for="YachtCategory" asp-items="Model.Categories">
+            <option value="">All</option>
+        </select>
+        <label>Name: <input type="text" asp-for="SearchString" /></label>
+        <input type="submit" value="Filter" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>

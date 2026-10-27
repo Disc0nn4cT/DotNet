@@ -4,7 +4,7 @@ using RazorPagesYacht.Data;
 using Microsoft.EntityFrameworkCore;
 using RazorPagesYacht.Models;
 
-namespace RazorPagesYacht.Pages.YachtPages;
+namespace RazorPagesYacht.Pages.Yachts;
 
 public class CreateModel : PageModel
 {
