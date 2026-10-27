@@ -36,6 +36,9 @@ namespace RazorPagesYacht.Migrations
                     b.Property<DateTime>("LaunchDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("Length")
+                        .HasColumnType("decimal(6, 2)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 

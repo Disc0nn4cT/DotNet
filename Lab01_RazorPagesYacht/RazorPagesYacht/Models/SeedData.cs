@@ -22,7 +22,8 @@ public static class SeedData
         Shipyard = "Aperture Science",
         Category = "Research Vessel",
         LaunchDate = new DateTime(2007, 10, 10), 
-        Price = 0.00M                             
+        Price = 0.00M,
+        Length = 120.00M
     },
     new Yacht
     {
@@ -30,7 +31,8 @@ public static class SeedData
         Shipyard = "GlobeMaster",
         Category = "Explorer Yacht",
         LaunchDate = new DateTime(2023, 1, 1),   
-        Price = 1000000.00M                      
+        Price = 1000000.00M,
+        Length = 15.24M
     },
     new Yacht
     {
@@ -38,7 +40,8 @@ public static class SeedData
         Shipyard = "Elco",
         Category = "Motor Launch",
         LaunchDate = new DateTime(1992, 1, 1),
-        Price = 80000.00M
+        Price = 80000.00M,
+        Length = 7.92M
     },
     new Yacht
     {
@@ -46,7 +49,8 @@ public static class SeedData
         Shipyard = "Fountaine Pajot",
         Category = "Power Catamaran",
         LaunchDate = new DateTime(2005, 1, 1),
-        Price = 229900.00M
+        Price = 229900.00M,
+        Length = 11.28M
     },
     new Yacht
     {
@@ -54,7 +58,8 @@ public static class SeedData
         Shipyard = "Oceanco",
         Category = "Research Vessel",
         LaunchDate = new DateTime(2025, 8, 1),    
-        Price = 500000000.00M                     
+        Price = 500000000.00M,
+        Length = 111.00M
     }
 );
 
