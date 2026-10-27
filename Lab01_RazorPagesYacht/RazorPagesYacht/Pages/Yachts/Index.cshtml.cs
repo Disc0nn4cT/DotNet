@@ -29,7 +29,7 @@ public class IndexModel : PageModel
 	public async Task OnGetAsync()
 	{
 		// Distinct list of categories for the dropdown
-		IQueryable<string?> categoryQuery = from y in _context.Yacht
+		IQueryable<string> categoryQuery = from y in _context.Yacht
 											orderby y.Category
 											select y.Category;
 
@@ -39,7 +39,7 @@ public class IndexModel : PageModel
 
 		if (!string.IsNullOrEmpty(SearchString))
 		{
-			yachts = yachts.Where(y => y.Name!.Contains(SearchString));
+			yachts = yachts.Where(y => y.Name.Contains(SearchString));
 		}
 
 		if (!string.IsNullOrEmpty(YachtCategory))
