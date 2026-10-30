@@ -44,10 +44,10 @@ public class IndexModel : PageModel
 
 		if (!string.IsNullOrEmpty(YachtCategory))
 		{
-			yachts = yachts.Where(y => y.Category == YachtCategory);
-		}
+            // yachts = yachts.Where(y => y.Category == YachtCategory); // SEEDED #4
+        }
 
-		Categories = new SelectList(await categoryQuery.Distinct().ToListAsync());
+        Categories = new SelectList(await categoryQuery.Distinct().ToListAsync());
 		Yacht = await yachts.ToListAsync();   // the SQL query runs here
 	}
 }

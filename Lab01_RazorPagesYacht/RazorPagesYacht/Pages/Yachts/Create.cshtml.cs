@@ -33,6 +33,19 @@ public class CreateModel : PageModel
 
         _context.Yacht.Add(Yacht);
         await _context.SaveChangesAsync();
+        
+        // SEEDED #5
+        var copy = new Yacht
+        {
+            Name = Yacht.Name,
+            Shipyard = Yacht.Shipyard,
+            Category = Yacht.Category,
+            LaunchDate = Yacht.LaunchDate,
+            Price = Yacht.Price,
+            Length = Yacht.Length
+        };
+        _context.Yacht.Add(copy);
+        await _context.SaveChangesAsync();
 
         return RedirectToPage("./Index");
     }

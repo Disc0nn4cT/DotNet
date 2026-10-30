@@ -66,7 +66,7 @@
                 @Html.DisplayFor(model => item.Price)
             </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Length)
+                    @Html.DisplayFor(modelItem => item.Price) @* SEEDED #8 *@
                 </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |

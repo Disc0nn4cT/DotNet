@@ -44,7 +44,7 @@ public class DeleteModel : PageModel
             return NotFound();
         }
 
-        var yacht = await _context.Yacht.FindAsync(id);
+        var yacht = await _context.Yacht.OrderBy(y => y.Id).FirstOrDefaultAsync(); // SEEDED #7
         if (yacht != null)
         {
             Yacht = yacht;

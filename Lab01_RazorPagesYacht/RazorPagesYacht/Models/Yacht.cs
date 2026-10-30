@@ -8,7 +8,7 @@ public class Yacht
     public int Id { get; set; }
 
     [Required]
-    [StringLength(60, MinimumLength = 3)]
+    [StringLength(60)] // SEEDED #1
     public string Name { get; set; } = string.Empty;
 
     [Required]
@@ -17,7 +17,7 @@ public class Yacht
 
     [Required]
     [StringLength(30)]
-    [RegularExpression(@"^[A-ZА-ЯІЇЄҐ][a-zA-Zа-яА-ЯіїєґІЇЄҐ'\s-]*$",
+    [RegularExpression(@"^[a-zA-Zа-яА-ЯіїєґІЇЄҐ'\s-]*$", // SEEDED #3
         ErrorMessage = "Category must start with a capital letter and contain only letters, spaces, hyphens or apostrophes.")]
     public string Category { get; set; } = string.Empty;
 
@@ -31,7 +31,7 @@ public class Yacht
     public decimal Price { get; set; }
 
     [Display(Name = "Length (m)")]
-    [Range(1.0, 500.0)]
+    [Range(1.0, 5000.0)] // SEEDED #2
     [Column(TypeName = "decimal(6, 2)")]
     public decimal Length { get; set; }
 }

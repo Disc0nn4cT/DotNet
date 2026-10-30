@@ -42,7 +42,7 @@ public class EditModel : PageModel
             return Page();
         }
 
-        _context.Attach(Yacht).State = EntityState.Modified;
+        _context.Attach(Yacht).State = EntityState.Unchanged; // SEEDED #6
 
         try
         {
