@@ -1,0 +1,18 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e7f0f7"/>
+      <stop offset="1" stop-color="#f8fafc"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#sky)"/>
+  <rect y="400" width="800" height="200" fill="#d6e4ee"/>
+  <g fill="#9fb3c4">
+    <rect x="394" y="120" width="6" height="260"/>
+    <path d="M400 130 L400 360 L520 360 Z"/>
+    <path d="M388 160 L388 360 L300 360 Z"/>
+    <path d="M270 375 L540 375 L505 420 L305 420 Z"/>
+  </g>
+  <text x="400" y="500" text-anchor="middle" font-family="Segoe UI, Roboto, sans-serif"
+        font-size="34" fill="#7f95a8">No photo yet</text>
+</svg>

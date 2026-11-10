@@ -1,0 +1,31 @@
+﻿@page "{id:int}"
+@model RazorPagesYacht.Pages.Catalog.DetailsModel
+@{
+    ViewData["Title"] = Model.Yacht?.Name ?? "Yacht";
+}
+
+<a asp-page="./Index" class="btn btn-link ps-0">&larr; Back to catalog</a>
+
+<div class="row g-4 align-items-start">
+    <div class="col-12 col-md-5 col-lg-4">
+        <img src="~/images/placeholder-yacht.svg"
+             alt="Photo of @Model.Yacht?.Name"
+             class="img-fluid rounded shadow-sm"
+             style="object-fit:cover; aspect-ratio:4/3;" />
+    </div>
+    <div class="col">
+        <h1 class="mb-2">@Model.Yacht?.Name</h1>
+        <div class="text-muted mb-3">@Model.Yacht?.Category</div>
+        <dl class="row">
+            <dt class="col-sm-3">Shipyard</dt>
+            <dd class="col-sm-9">@Model.Yacht?.Shipyard</dd>
+            <dt class="col-sm-3">Launch date</dt>
+            <dd class="col-sm-9">@Model.Yacht?.LaunchDate.ToString("yyyy-MM-dd")</dd>
+            <dt class="col-sm-3">Length</dt>
+            <dd class="col-sm-9">@Model.Yacht?.Length m</dd>
+            <dt class="col-sm-3">Price</dt>
+            <dd class="col-sm-9">@Model.Yacht?.Price.ToString("C")</dd>
+        </dl>
+        @* Reviews will be added in part D *@
+    </div>
+</div>
