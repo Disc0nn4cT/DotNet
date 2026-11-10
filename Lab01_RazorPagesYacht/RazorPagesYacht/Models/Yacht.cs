@@ -37,4 +37,5 @@ public class Yacht
 
     [Display(Name = "Photo")]
     public string? PhotoPath { get; set; }   // e.g. "/uploads/yachts/12/photo-abc123.jpg"
+    public ICollection<Review> Reviews { get; set; } = new List<Review>();
 }
