@@ -34,4 +34,7 @@ public class Yacht
     [Range(1.0, 500.0)]
     [Column(TypeName = "decimal(6, 2)")]
     public decimal Length { get; set; }
+
+    [Display(Name = "Photo")]
+    public string? PhotoPath { get; set; }   // e.g. "/uploads/yachts/12/photo-abc123.jpg"
 }

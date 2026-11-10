@@ -48,7 +48,7 @@ else
         {
             <div class="col">
                 <div class="card h-100 shadow-sm border-0">
-                    <img src="~/images/placeholder-yacht.svg"
+                    <img src="@(string.IsNullOrEmpty(y.PhotoPath) ? Url.Content("~/images/placeholder-yacht.svg") : Url.Content(y.PhotoPath))"
                          class="card-img-top"
                          alt="Photo of @y.Name"
                          style="object-fit:cover; aspect-ratio:4/3;" />

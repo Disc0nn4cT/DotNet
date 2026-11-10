@@ -1,70 +1,66 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using RazorPagesYacht.Models;
 using RazorPagesYacht.Data;
+using RazorPagesYacht.Models;
+using RazorPagesYacht.Services;
+
 namespace RazorPagesYacht.Pages.Yachts;
 
 public class EditModel : PageModel
 {
     private readonly RazorPagesYachtContext _context;
+    private readonly IWebHostEnvironment _env;
 
-    public EditModel(RazorPagesYachtContext context)
+    public EditModel(RazorPagesYachtContext context, IWebHostEnvironment env)
     {
         _context = context;
+        _env = env;
     }
 
     [BindProperty]
     public Yacht Yacht { get; set; } = default!;
 
+    [BindProperty]
+    public IFormFile? PhotoFile { get; set; }
+
     public async Task<IActionResult> OnGetAsync(int? id)
     {
-        if (id is null)
-        {
-            return NotFound();
-        }
-
-        var yacht = await _context.Yacht.FirstOrDefaultAsync(m => m.Id == id);
-        if (yacht is null)
-        {
-            return NotFound();
-        }
+        if (id == null) return NotFound();
+        var yacht = await _context.Yacht.FirstOrDefaultAsync(y => y.Id == id);
+        if (yacht == null) return NotFound();
         Yacht = yacht;
         return Page();
     }
 
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see https://aka.ms/RazorPagesCRUD.
     public async Task<IActionResult> OnPostAsync()
     {
+        var photoError = PhotoHelper.Validate(PhotoFile);
+        if (photoError != null)
+            ModelState.AddModelError(nameof(PhotoFile), photoError);
+
         if (!ModelState.IsValid)
-        {
             return Page();
-        }
 
-        _context.Attach(Yacht).State = EntityState.Modified;
+        var dbYacht = await _context.Yacht.FirstOrDefaultAsync(y => y.Id == Yacht.Id);
+        if (dbYacht == null) return NotFound();   // deleted by someone else meanwhile
 
-        try
+        // Copy only the fields the form is allowed to change
+        dbYacht.Name = Yacht.Name;
+        dbYacht.Shipyard = Yacht.Shipyard;
+        dbYacht.Category = Yacht.Category;
+        dbYacht.LaunchDate = Yacht.LaunchDate;
+        dbYacht.Price = Yacht.Price;
+        dbYacht.Length = Yacht.Length;
+
+        if (PhotoFile is { Length: > 0 })
         {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!YachtExists(Yacht.Id))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
+            var newPath = await PhotoHelper.SaveAsync(PhotoFile, dbYacht.Id, _env.WebRootPath);
+            PhotoHelper.TryDelete(dbYacht.PhotoPath, _env.WebRootPath);  // remove the old file
+            dbYacht.PhotoPath = newPath;
         }
 
+        await _context.SaveChangesAsync();
         return RedirectToPage("./Index");
-    }
-
-    private bool YachtExists(int id)
-    {
-        return _context.Yacht.Any(e => e.Id == id);
     }
 }

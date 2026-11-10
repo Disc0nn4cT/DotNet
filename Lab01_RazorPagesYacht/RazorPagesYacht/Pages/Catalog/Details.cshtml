@@ -8,7 +8,7 @@
 
 <div class="row g-4 align-items-start">
     <div class="col-12 col-md-5 col-lg-4">
-        <img src="~/images/placeholder-yacht.svg"
+        <img src="@(string.IsNullOrEmpty(Model.Yacht?.PhotoPath) ? Url.Content("~/images/placeholder-yacht.svg") : Url.Content(Model.Yacht!.PhotoPath))"
              alt="Photo of @Model.Yacht?.Name"
              class="img-fluid rounded shadow-sm"
              style="object-fit:cover; aspect-ratio:4/3;" />
