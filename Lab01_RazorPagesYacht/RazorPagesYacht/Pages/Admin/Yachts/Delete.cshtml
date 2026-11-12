@@ -1,13 +1,13 @@
-@page "{id:int}"
+п»ї@page "{id:int}"
 @model RazorPagesYacht.Pages.Admin.Yachts.DeleteModel
 @{
-    ViewData["Title"] = "Видалення яхти";
+    ViewData["Title"] = "Р’РёРґР°Р»РµРЅРЅСЏ СЏС…С‚Рё";
 }
 
 <h1>@ViewData["Title"]</h1>
 <div class="alert alert-warning">
-    Ви впевнені, що хочете видалити яхту <strong>@Model.Yacht.Name</strong>?
-    Разом із нею буде видалено фото та всі відгуки.
+    Р’Рё РІРїРµРІРЅРµРЅС–, С‰Рѕ С…РѕС‡РµС‚Рµ РІРёРґР°Р»РёС‚Рё СЏС…С‚Сѓ <strong>@Model.Yacht.Name</strong>?
+    Р Р°Р·РѕРј С–Р· РЅРµСЋ Р±СѓРґРµ РІРёРґР°Р»РµРЅРѕ С„РѕС‚Рѕ С‚Р° РІСЃС– РІС–РґРіСѓРєРё.
 </div>
 
 <dl class="row">
@@ -25,6 +25,6 @@
 
 <form method="post">
     <input type="hidden" asp-for="Yacht.Id" />
-    <button type="submit" class="btn btn-danger">Видалити</button>
-    <a asp-page="./Index" class="btn btn-outline-secondary">Скасувати</a>
+    <button type="submit" class="btn btn-danger">Р’РёРґР°Р»РёС‚Рё</button>
+    <a asp-page="./Index" class="btn btn-outline-secondary">РЎРєР°СЃСѓРІР°С‚Рё</a>
 </form>

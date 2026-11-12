@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+п»їusing Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using RazorPagesYacht.Data;
@@ -54,7 +54,7 @@ public class IndexModel : PageModel
             .OrderByDescending(r => r.UpdatedAt ?? r.CreatedAt)
             .Select(r => new RowVM(
                 r.Id, r.YachtId, r.Yacht!.Name,
-                r.ReviewerName ?? "Користувач",
+                r.ReviewerName ?? "РљРѕСЂРёСЃС‚СѓРІР°С‡",
                 r.Rating, r.Comment, r.CreatedAt,
                 r.AdminReply, r.AdminRepliedAt))
             .ToListAsync();

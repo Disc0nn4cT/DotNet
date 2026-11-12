@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+ï»¿using Microsoft.EntityFrameworkCore;
 using RazorPagesYacht.Models;
 
 namespace RazorPagesYacht.Data;
@@ -19,7 +19,7 @@ public class RazorPagesYachtContext(DbContextOptions<RazorPagesYachtContext> opt
             .HasIndex(r => new { r.YachtId, r.UserId })
             .IsUnique();
 
-        // Yacht 1 —— * Review; deleting a yacht deletes its reviews
+        // Yacht 1 â€”â€” * Review; deleting a yacht deletes its reviews
         modelBuilder.Entity<Review>()
             .HasOne(r => r.Yacht)
             .WithMany(y => y.Reviews)

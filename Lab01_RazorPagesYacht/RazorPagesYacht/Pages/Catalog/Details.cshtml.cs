@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+п»їusing Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -49,9 +49,9 @@ public class DetailsModel : PageModel
         if (User.Identity?.IsAuthenticated != true) return Challenge(); // -> login page
 
         if (MyRating is null or < 1 or > 5)
-            ModelState.AddModelError(nameof(MyRating), "Оберіть оцінку від 1 до 5.");
+            ModelState.AddModelError(nameof(MyRating), "РћР±РµСЂС–С‚СЊ РѕС†С–РЅРєСѓ РІС–Рґ 1 РґРѕ 5.");
         if (MyComment?.Length > 2000)
-            ModelState.AddModelError(nameof(MyComment), "Коментар задовгий (максимум 2000 символів).");
+            ModelState.AddModelError(nameof(MyComment), "РљРѕРјРµРЅС‚Р°СЂ Р·Р°РґРѕРІРіРёР№ (РјР°РєСЃРёРјСѓРј 2000 СЃРёРјРІРѕР»С–РІ).");
 
         if (!ModelState.IsValid)
         {

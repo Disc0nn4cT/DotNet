@@ -12,6 +12,8 @@ var connectionString = builder.Configuration.GetConnectionString("RazorPagesYach
 // Two contexts, one database
 builder.Services.AddDbContext<RazorPagesYachtContext>(options =>
     options.UseSqlServer(connectionString));
+
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
@@ -39,10 +41,10 @@ builder.Services.AddRazorPages(options =>
 {
     // Ukrainian texts for model-binding errors (e.g. letters typed into a number field)
     var m = o.ModelBindingMessageProvider;
-    m.SetValueMustBeANumberAccessor(field => $"Поле «{field}» має бути числом.");
-    m.SetAttemptedValueIsInvalidAccessor((value, field) => $"Значення «{value}» некоректне для поля «{field}».");
-    m.SetValueMustNotBeNullAccessor(field => $"Поле «{field}» обов’язкове.");
-    m.SetValueIsInvalidAccessor(value => $"Значення «{value}» некоректне.");
+    m.SetValueMustBeANumberAccessor(field => $"пїЅпїЅпїЅпїЅ пїЅ{field}пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.");
+    m.SetAttemptedValueIsInvalidAccessor((value, field) => $"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ{value}пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ{field}пїЅ.");
+    m.SetValueMustNotBeNullAccessor(field => $"пїЅпїЅпїЅпїЅ пїЅ{field}пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");
+    m.SetValueIsInvalidAccessor(value => $"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ{value}пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");
 });
 
 

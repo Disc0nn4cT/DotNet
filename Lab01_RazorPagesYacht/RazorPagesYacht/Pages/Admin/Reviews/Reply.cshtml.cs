@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+п»їusing System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -23,8 +23,8 @@ public class ReplyModel : PageModel
 
     public class ReplyInput
     {
-        [Display(Name = "Відповідь адміністратора")]
-        [StringLength(2000, ErrorMessage = "Максимум 2000 символів.")]
+        [Display(Name = "Р’С–РґРїРѕРІС–РґСЊ Р°РґРјС–РЅС–СЃС‚СЂР°С‚РѕСЂР°")]
+        [StringLength(2000, ErrorMessage = "РњР°РєСЃРёРјСѓРј 2000 СЃРёРјРІРѕР»С–РІ.")]
         public string? AdminReply { get; set; }
     }
 

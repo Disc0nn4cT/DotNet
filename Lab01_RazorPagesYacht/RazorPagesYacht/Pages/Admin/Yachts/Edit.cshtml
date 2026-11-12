@@ -1,10 +1,10 @@
-@page "{id:int}"
+п»ї@page "{id:int}"
 @model RazorPagesYacht.Pages.Admin.Yachts.EditModel
 @{
-    ViewData["Title"] = "Редагування яхти";
+    ViewData["Title"] = "Р РµРґР°РіСѓРІР°РЅРЅСЏ СЏС…С‚Рё";
 }
 
-<h1>Редагування яхти</h1>
+<h1>Р РµРґР°РіСѓРІР°РЅРЅСЏ СЏС…С‚Рё</h1>
 
 <hr />
 <div class="row">
@@ -44,17 +44,17 @@
                 <span asp-validation-for="Yacht.Length" class="text-danger"></span>
             </div>
             <div class="form-group mt-2">
-                <label class="control-label d-block">Поточне фото</label>
+                <label class="control-label d-block">РџРѕС‚РѕС‡РЅРµ С„РѕС‚Рѕ</label>
                 <img src="@(string.IsNullOrEmpty(Model.Yacht.PhotoPath) ? Url.Content("~/images/placeholder-yacht.svg") : Url.Content(Model.Yacht.PhotoPath))"
                      class="img-fluid rounded border" style="max-width:240px; object-fit:cover; aspect-ratio:4/3;" />
             </div>
             <div class="form-group">
-                <label class="control-label">Замінити фото (jpg/png/webp, до 2 МБ)</label>
+                <label class="control-label">Р—Р°РјС–РЅРёС‚Рё С„РѕС‚Рѕ (jpg/png/webp, РґРѕ 2 РњР‘)</label>
                 <input asp-for="PhotoFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
                 <span asp-validation-for="PhotoFile" class="text-danger"></span>
             </div>
             <div class="form-group mt-2">
-                <input type="submit" value="Зберегти" class="btn btn-primary" />
+                <input type="submit" value="Р—Р±РµСЂРµРіС‚Рё" class="btn btn-primary" />
             </div>
         </form>
     </div>

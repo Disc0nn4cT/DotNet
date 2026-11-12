@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+п»їusing System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,14 +30,14 @@ public class ReplyModel : PageModel
 
     public class ReplyInput
     {
-        [Required(ErrorMessage = "Вкажіть тему листа.")]
+        [Required(ErrorMessage = "Р’РєР°Р¶С–С‚СЊ С‚РµРјСѓ Р»РёСЃС‚Р°.")]
         [StringLength(200)]
-        [Display(Name = "Тема листа")]
+        [Display(Name = "РўРµРјР° Р»РёСЃС‚Р°")]
         public string Subject { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Напишіть текст відповіді.")]
+        [Required(ErrorMessage = "РќР°РїРёС€С–С‚СЊ С‚РµРєСЃС‚ РІС–РґРїРѕРІС–РґС–.")]
         [StringLength(4000)]
-        [Display(Name = "Текст відповіді")]
+        [Display(Name = "РўРµРєСЃС‚ РІС–РґРїРѕРІС–РґС–")]
         public string Body { get; set; } = string.Empty;
     }
 
@@ -51,7 +51,7 @@ public class ReplyModel : PageModel
 
         // Pre-fill: previous reply, or a "Re:" template
         Input.Subject = Item.AdminReplySubject ?? $"Re: {Item.Subject}";
-        Input.Body = Item.AdminReplyBody ?? $"Вітаємо, {Item.Name}!\n\n";
+        Input.Body = Item.AdminReplyBody ?? $"Р’С–С‚Р°С”РјРѕ, {Item.Name}!\n\n";
         return Page();
     }
 
@@ -69,7 +69,7 @@ public class ReplyModel : PageModel
         // Encode user-provided text before putting it into HTML
         var bodyHtml = WebUtility.HtmlEncode(Input.Body).Replace("\n", "<br/>");
         var html = $"<p>{bodyHtml}</p><hr/>" +
-                   $"<p style=\"color:#666\">Ваше звернення: <b>{WebUtility.HtmlEncode(f.Subject)}</b></p>";
+                   $"<p style=\"color:#666\">Р’Р°С€Рµ Р·РІРµСЂРЅРµРЅРЅСЏ: <b>{WebUtility.HtmlEncode(f.Subject)}</b></p>";
 
         try
         {
@@ -78,7 +78,7 @@ public class ReplyModel : PageModel
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to send reply to {Email}", f.Email);
-            ModelState.AddModelError(string.Empty, "Не вдалося надіслати лист. Перевірте налаштування пошти.");
+            ModelState.AddModelError(string.Empty, "РќРµ РІРґР°Р»РѕСЃСЏ РЅР°РґС–СЃР»Р°С‚Рё Р»РёСЃС‚. РџРµСЂРµРІС–СЂС‚Рµ РЅР°Р»Р°С€С‚СѓРІР°РЅРЅСЏ РїРѕС€С‚Рё.");
             Item = f;
             return Page();
         }
@@ -91,7 +91,7 @@ public class ReplyModel : PageModel
         f.AdminRepliedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
-        TempData["OkMessage"] = $"Відповідь надіслано на {f.Email}.";
+        TempData["OkMessage"] = $"Р’С–РґРїРѕРІС–РґСЊ РЅР°РґС–СЃР»Р°РЅРѕ РЅР° {f.Email}.";
         return RedirectToPage("./Index");
     }
 }

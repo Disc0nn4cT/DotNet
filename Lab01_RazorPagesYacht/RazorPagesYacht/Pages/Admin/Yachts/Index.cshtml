@@ -1,25 +1,25 @@
-@page
+п»ї@page
 @model RazorPagesYacht.Pages.Admin.Yachts.IndexModel
 @{
-    ViewData["Title"] = "Керування яхтами";
+    ViewData["Title"] = "РљРµСЂСѓРІР°РЅРЅСЏ СЏС…С‚Р°РјРё";
 }
 
 <h1 class="mb-3">@ViewData["Title"]</h1>
 
 <form class="row g-2 align-items-end mb-3">
     <div class="col-12 col-md-3">
-        <a asp-page="Create" class="btn btn-success w-100">+ Додати яхту</a>
+        <a asp-page="Create" class="btn btn-success w-100">+ Р”РѕРґР°С‚Рё СЏС…С‚Сѓ</a>
     </div>
     <div class="col-12 col-md-3">
         <select asp-for="YachtCategory" asp-items="Model.Categories" class="form-select">
-            <option value="">Усі категорії</option>
+            <option value="">РЈСЃС– РєР°С‚РµРіРѕСЂС–С—</option>
         </select>
     </div>
     <div class="col-8 col-md-4">
-        <input type="text" asp-for="SearchString" class="form-control" placeholder="Пошук за назвою" />
+        <input type="text" asp-for="SearchString" class="form-control" placeholder="РџРѕС€СѓРє Р·Р° РЅР°Р·РІРѕСЋ" />
     </div>
     <div class="col-4 col-md-2">
-        <button type="submit" class="btn btn-primary w-100">Фільтр</button>
+        <button type="submit" class="btn btn-primary w-100">Р¤С–Р»СЊС‚СЂ</button>
     </div>
 </form>
 
@@ -47,9 +47,9 @@
                     <td>@Html.DisplayFor(modelItem => item.Price)</td>
                     <td>@Html.DisplayFor(modelItem => item.Length)</td>
                     <td class="text-end text-nowrap">
-                        <a asp-page="./Edit" asp-route-id="@item.Id">Редагувати</a> |
-                        <a asp-page="./Details" asp-route-id="@item.Id">Деталі</a> |
-                        <a asp-page="./Delete" asp-route-id="@item.Id" class="text-danger">Видалити</a>
+                        <a asp-page="./Edit" asp-route-id="@item.Id">Р РµРґР°РіСѓРІР°С‚Рё</a> |
+                        <a asp-page="./Details" asp-route-id="@item.Id">Р”РµС‚Р°Р»С–</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.Id" class="text-danger">Р’РёРґР°Р»РёС‚Рё</a>
                     </td>
                 </tr>
             }

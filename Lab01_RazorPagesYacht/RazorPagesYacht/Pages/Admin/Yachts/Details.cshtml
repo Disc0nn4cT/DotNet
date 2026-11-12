@@ -1,4 +1,4 @@
-@page "{id:int}"
+п»ї@page "{id:int}"
 @model RazorPagesYacht.Pages.Admin.Yachts.DetailsModel
 @{
     ViewData["Title"] = Model.Yacht.Name;
@@ -9,7 +9,7 @@
 <div class="row g-4">
     <div class="col-md-4">
         <img src="@(string.IsNullOrEmpty(Model.Yacht.PhotoPath) ? Url.Content("~/images/placeholder-yacht.svg") : Url.Content(Model.Yacht.PhotoPath))"
-             class="img-fluid rounded border" alt="Фото @Model.Yacht.Name" style="object-fit:cover; aspect-ratio:4/3;" />
+             class="img-fluid rounded border" alt="Р¤РѕС‚Рѕ @Model.Yacht.Name" style="object-fit:cover; aspect-ratio:4/3;" />
     </div>
     <div class="col-md-8">
         <dl class="row">
@@ -27,7 +27,7 @@
     </div>
 </div>
 <div class="mt-3">
-    <a asp-page="./Edit" asp-route-id="@Model.Yacht.Id" class="btn btn-primary">Редагувати</a>
-    <a asp-page="./Index" class="btn btn-outline-secondary">До списку</a>
-    <a asp-page="/Catalog/Details" asp-route-id="@Model.Yacht.Id" class="btn btn-link">Відкрити в каталозі</a>
+    <a asp-page="./Edit" asp-route-id="@Model.Yacht.Id" class="btn btn-primary">Р РµРґР°РіСѓРІР°С‚Рё</a>
+    <a asp-page="./Index" class="btn btn-outline-secondary">Р”Рѕ СЃРїРёСЃРєСѓ</a>
+    <a asp-page="/Catalog/Details" asp-route-id="@Model.Yacht.Id" class="btn btn-link">Р’С–РґРєСЂРёС‚Рё РІ РєР°С‚Р°Р»РѕР·С–</a>
 </div>

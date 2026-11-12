@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+п»їusing System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,25 +26,25 @@ public class IndexModel : PageModel
 
     public class ContactInput
     {
-        [Required(ErrorMessage = "Вкажіть ім’я.")]
+        [Required(ErrorMessage = "Р’РєР°Р¶С–С‚СЊ С–РјвЂ™СЏ.")]
         [StringLength(80)]
-        [Display(Name = "Ваше ім’я")]
+        [Display(Name = "Р’Р°С€Рµ С–РјвЂ™СЏ")]
         public string Name { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Вкажіть ел. пошту.")]
-        [EmailAddress(ErrorMessage = "Некоректна адреса ел. пошти.")]
+        [Required(ErrorMessage = "Р’РєР°Р¶С–С‚СЊ РµР». РїРѕС€С‚Сѓ.")]
+        [EmailAddress(ErrorMessage = "РќРµРєРѕСЂРµРєС‚РЅР° Р°РґСЂРµСЃР° РµР». РїРѕС€С‚Рё.")]
         [StringLength(120)]
-        [Display(Name = "Ел. пошта")]
+        [Display(Name = "Р•Р». РїРѕС€С‚Р°")]
         public string Email { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Вкажіть тему.")]
+        [Required(ErrorMessage = "Р’РєР°Р¶С–С‚СЊ С‚РµРјСѓ.")]
         [StringLength(120)]
-        [Display(Name = "Тема")]
+        [Display(Name = "РўРµРјР°")]
         public string Subject { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Напишіть повідомлення.")]
-        [StringLength(4000, ErrorMessage = "Максимум 4000 символів.")]
-        [Display(Name = "Повідомлення")]
+        [Required(ErrorMessage = "РќР°РїРёС€С–С‚СЊ РїРѕРІС–РґРѕРјР»РµРЅРЅСЏ.")]
+        [StringLength(4000, ErrorMessage = "РњР°РєСЃРёРјСѓРј 4000 СЃРёРјРІРѕР»С–РІ.")]
+        [Display(Name = "РџРѕРІС–РґРѕРјР»РµРЅРЅСЏ")]
         public string Message { get; set; } = string.Empty;
 
         // Honeypot: hidden from people, bots fill it in
@@ -76,10 +76,10 @@ public class IndexModel : PageModel
         if (!ModelState.IsValid)
             return Page();
 
-        // Simple anti-spam: a filled honeypot means a bot — pretend success, save nothing
+        // Simple anti-spam: a filled honeypot means a bot вЂ” pretend success, save nothing
         if (!string.IsNullOrWhiteSpace(Input.Website))
         {
-            OkMessage = "Дякуємо! Ваше повідомлення надіслано.";
+            OkMessage = "Р”СЏРєСѓС”РјРѕ! Р’Р°С€Рµ РїРѕРІС–РґРѕРјР»РµРЅРЅСЏ РЅР°РґС–СЃР»Р°РЅРѕ.";
             return RedirectToPage();
         }
 
@@ -93,7 +93,7 @@ public class IndexModel : PageModel
         });
         await _context.SaveChangesAsync();
 
-        OkMessage = "Дякуємо! Ваше повідомлення надіслано.";
+        OkMessage = "Р”СЏРєСѓС”РјРѕ! Р’Р°С€Рµ РїРѕРІС–РґРѕРјР»РµРЅРЅСЏ РЅР°РґС–СЃР»Р°РЅРѕ.";
         return RedirectToPage();   // Post-Redirect-Get
     }
 }
