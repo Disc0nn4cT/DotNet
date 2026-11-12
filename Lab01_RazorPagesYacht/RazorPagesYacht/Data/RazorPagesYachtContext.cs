@@ -8,6 +8,8 @@ public class RazorPagesYachtContext(DbContextOptions<RazorPagesYachtContext> opt
     public DbSet<Yacht> Yacht { get; set; } = default!;
     public DbSet<Review> Reviews { get; set; } = default!;
 
+    public DbSet<Feedback> Feedbacks { get; set; } = default!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

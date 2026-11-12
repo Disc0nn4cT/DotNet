@@ -28,6 +28,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Catalog/Index">Catalog</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Contact/Index">Контакти</a>
+                        </li>
                         @* Admin section link — visible only to admins *@
                         @if (User.IsInRole("Admin"))
                         {
