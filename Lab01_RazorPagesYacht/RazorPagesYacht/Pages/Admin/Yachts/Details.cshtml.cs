@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using RazorPagesYacht.Models;
 using RazorPagesYacht.Data;
-namespace RazorPagesYacht.Pages.Yachts;
+namespace RazorPagesYacht.Pages.Admin.Yachts;
 
 public class DetailsModel : PageModel
 {

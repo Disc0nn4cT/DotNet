@@ -33,7 +33,7 @@ builder.Services.AddAuthorization(options =>
 // Close the whole /Yachts folder to everyone except admins
 builder.Services.AddRazorPages(options =>
 {
-    options.Conventions.AuthorizeFolder("/Yachts", "RequireAdministratorRole");
+
     options.Conventions.AuthorizeFolder("/Admin", "RequireAdministratorRole"); // whole admin area
 });
 

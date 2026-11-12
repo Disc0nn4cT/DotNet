@@ -5,7 +5,7 @@ using RazorPagesYacht.Data;
 using RazorPagesYacht.Models;
 using RazorPagesYacht.Services;
 
-namespace RazorPagesYacht.Pages.Yachts;
+namespace RazorPagesYacht.Pages.Admin.Yachts;
 
 public class EditModel : PageModel
 {

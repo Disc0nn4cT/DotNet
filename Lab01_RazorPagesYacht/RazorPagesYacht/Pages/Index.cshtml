@@ -1,10 +1,76 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Головна";
+    string Stars(double avg) { var n = (int)Math.Round(avg); return new string('★', n) + new string('☆', 5 - n); }
+    string Photo(string? path) => string.IsNullOrEmpty(path) ? Url.Content("~/images/placeholder-yacht.svg") : Url.Content(path);
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<section class="p-4 p-md-5 mb-4 rounded-3 bg-light border">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <h1 class="display-5 fw-bold">⚓ RpYacht</h1>
+            <p class="lead mb-3">
+                Каталог яхт і суден: від невеликих катерів до експедиційних яхт і суперяхт.
+                Переглядайте характеристики, фото та відгуки власників і поціновувачів.
+            </p>
+            <a asp-page="/Catalog/Index" class="btn btn-primary btn-lg me-2">Відкрити каталог</a>
+            <a asp-page="/Contact/Index" class="btn btn-outline-secondary btn-lg">Зв’язатися з нами</a>
+        </div>
+        <div class="col-lg-5">
+            <div class="row text-center g-3">
+                <div class="col-4">
+                    <div class="fs-2 fw-bold">@Model.YachtCount</div>
+                    <div class="text-muted small">суден</div>
+                </div>
+                <div class="col-4">
+                    <div class="fs-2 fw-bold">@Model.CategoryCount</div>
+                    <div class="text-muted small">категорій</div>
+                </div>
+                <div class="col-4">
+                    <div class="fs-2 fw-bold">@Model.ReviewCount</div>
+                    <div class="text-muted small">відгуків</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (Model.TopRated.Count > 0)
+{
+    <h2 class="h4 mb-3">Найвище оцінені</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+        @foreach (var y in Model.TopRated)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0">
+                    <img src="@Photo(y.PhotoPath)" class="card-img-top" alt="Фото @y.Name" style="object-fit:cover; aspect-ratio:4/3;" />
+                    <div class="card-body">
+                        <h5 class="card-title mb-1">@y.Name</h5>
+                        <div class="text-muted small mb-2">@y.Category · @y.Length м</div>
+                        <span class="text-warning">@Stars(y.AvgRating!.Value)</span>
+                        <span class="small ms-1">@y.AvgRating.Value.ToString("0.0") (@y.ReviewCount)</span>
+                        <a class="stretched-link" asp-page="/Catalog/Details" asp-route-id="@y.Id"></a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<h2 class="h4 mb-3">Нові надходження</h2>
+<div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+    @foreach (var y in Model.Latest)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <img src="@Photo(y.PhotoPath)" class="card-img-top" alt="Фото @y.Name" style="object-fit:cover; aspect-ratio:4/3;" />
+                <div class="card-body">
+                    <h5 class="card-title mb-1">@y.Name</h5>
+                    <div class="text-muted small">@y.Category · @y.Length м</div>
+                    <a class="stretched-link" asp-page="/Catalog/Details" asp-route-id="@y.Id"></a>
+                </div>
+            </div>
+        </div>
+    }
 </div>

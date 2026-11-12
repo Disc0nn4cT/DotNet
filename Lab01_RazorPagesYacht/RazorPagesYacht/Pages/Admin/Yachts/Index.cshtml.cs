@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using RazorPagesYacht.Data;
 using RazorPagesYacht.Models;
 
-namespace RazorPagesYacht.Pages.Yachts;
+namespace RazorPagesYacht.Pages.Admin.Yachts;
 
 public class IndexModel : PageModel
 {
