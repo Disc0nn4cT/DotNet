@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RazorPagesYacht.Data;
 using RazorPagesYacht.Models;
+using RazorPagesYacht.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,14 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AuthorizeFolder("/Yachts", "RequireAdministratorRole");
     options.Conventions.AuthorizeFolder("/Admin", "RequireAdministratorRole"); // whole admin area
 });
+
+
+// Email: real SMTP if a host is configured, otherwise log emails to the console
+builder.Services.Configure<EmailOptions>(builder.Configuration.GetSection("Email"));
+if (string.IsNullOrWhiteSpace(builder.Configuration["Email:Host"]))
+    builder.Services.AddTransient<IEmailService, ConsoleEmailService>();
+else
+    builder.Services.AddTransient<IEmailService, SmtpEmailService>();
 
 var app = builder.Build();
 
