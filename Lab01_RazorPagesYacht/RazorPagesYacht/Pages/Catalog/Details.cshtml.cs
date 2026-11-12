@@ -49,9 +49,9 @@ public class DetailsModel : PageModel
         if (User.Identity?.IsAuthenticated != true) return Challenge(); // -> login page
 
         if (MyRating is null or < 1 or > 5)
-            ModelState.AddModelError(nameof(MyRating), "Choose a rating from 1 to 5.");
+            ModelState.AddModelError(nameof(MyRating), "Оберіть оцінку від 1 до 5.");
         if (MyComment?.Length > 2000)
-            ModelState.AddModelError(nameof(MyComment), "The comment is too long (max 2000 characters).");
+            ModelState.AddModelError(nameof(MyComment), "Коментар задовгий (максимум 2000 символів).");
 
         if (!ModelState.IsValid)
         {

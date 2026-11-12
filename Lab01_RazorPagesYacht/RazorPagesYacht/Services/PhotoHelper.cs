@@ -10,8 +10,8 @@ public static class PhotoHelper
     {
         if (file == null || file.Length == 0) return null;
         var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-        if (!Permitted.Contains(ext)) return "Allowed formats: jpg, jpeg, png, webp.";
-        if (file.Length > MaxSize) return "The file is larger than 2 MB.";
+        if (!Permitted.Contains(ext)) return "Дозволені формати: jpg, jpeg, png, webp.";
+        if (file.Length > MaxSize) return "Файл більший за 2 МБ.";
         return null;
     }
 

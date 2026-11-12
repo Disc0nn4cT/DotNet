@@ -1,11 +1,10 @@
 @page
 @model RazorPagesYacht.Pages.Admin.Yachts.CreateModel
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Нова яхта";
 }
 
-<h1>Create</h1>
-<h4>Yacht</h4>
+<h1>Нова яхта</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -42,19 +41,19 @@
                 <span asp-validation-for="Yacht.Length" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Photo (jpg/png/webp, up to 2 MB)</label>
+                <label class="control-label">Фото (jpg/png/webp, до 2 МБ)</label>
                 <input asp-for="PhotoFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
                 <span asp-validation-for="PhotoFile" class="text-danger"></span>
             </div>
             <div class="form-group mt-2">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Створити" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="Index">До списку</a>
 </div>
 
 @section Scripts {

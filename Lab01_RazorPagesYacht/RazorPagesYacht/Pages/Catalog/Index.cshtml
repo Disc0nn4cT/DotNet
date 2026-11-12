@@ -1,45 +1,45 @@
 ﻿@page
 @model RazorPagesYacht.Pages.Catalog.IndexModel
 @{
-    ViewData["Title"] = "Yacht Catalog";
+    ViewData["Title"] = "Каталог яхт";
 }
 
 <h1 class="mb-3">@ViewData["Title"]</h1>
 
 <form method="get" class="row g-2 mb-3 align-items-end">
     <div class="col-12 col-sm-6 col-md-5">
-        <label for="Q" class="form-label">Search by name</label>
-        <input id="Q" name="Q" value="@Model.Q" class="form-control" placeholder="e.g. Leviathan" />
+        <label for="Q" class="form-label">Пошук за назвою</label>
+        <input id="Q" name="Q" value="@Model.Q" class="form-control" placeholder="Напр., Leviathan" />
     </div>
     <div class="col-12 col-sm-4 col-md-3">
-        <label for="Category" class="form-label">Category</label>
+        <label for="Category" class="form-label">Категорія</label>
         <select id="Category" asp-for="Category" asp-items="Model.CategoryOptions" class="form-select">
-            <option value="">All categories</option>
+            <option value="">Усі категорії</option>
         </select>
     </div>
     <div class="col-6 col-md-2">
-        <button class="btn btn-primary w-100">Filter</button>
+        <button class="btn btn-primary w-100">Фільтрувати</button>
     </div>
     <div class="col-6 col-md-2">
-        <a class="btn btn-outline-secondary w-100" asp-page="./Index">Reset</a>
+        <a class="btn btn-outline-secondary w-100" asp-page="./Index">Скинути</a>
     </div>
 </form>
 
 @if (Model.Yachts.Count == 0)
 {
-    <div class="alert alert-info">Nothing found.</div>
+    <div class="alert alert-info">Нічого не знайдено.</div>
 }
 else
 {
     <div class="text-muted small mb-2">
-        Found: <strong>@Model.Yachts.Count</strong>
+        Знайдено: <strong>@Model.Yachts.Count</strong>
         @if (!string.IsNullOrWhiteSpace(Model.Category))
         {
-            <span> • Category: <strong>@Model.Category</strong></span>
+            <span> • Категорія: <strong>@Model.Category</strong></span>
         }
         @if (!string.IsNullOrWhiteSpace(Model.Q))
         {
-            <span> • Search: <strong>@Model.Q</strong></span>
+            <span> • Пошук: <strong>@Model.Q</strong></span>
         }
     </div>
 
@@ -49,17 +49,15 @@ else
             <div class="col">
                 <div class="card h-100 shadow-sm border-0">
                     <img src="@(string.IsNullOrEmpty(y.PhotoPath) ? Url.Content("~/images/placeholder-yacht.svg") : Url.Content(y.PhotoPath))"
-                         class="card-img-top"
-                         alt="Photo of @y.Name"
-                         style="object-fit:cover; aspect-ratio:4/3;" />
+                         class="card-img-top" alt="Фото @y.Name" style="object-fit:cover; aspect-ratio:4/3;" />
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title mb-1">@y.Name</h5>
                         <div class="text-muted small">@y.Category · @y.Shipyard</div>
-                        <div class="mt-2 small">Launched: <strong>@y.LaunchDate.ToString("yyyy-MM-dd")</strong></div>
-                        <div class="small">Length: <strong>@y.Length m</strong></div>
+                        <div class="mt-2 small">Спущено на воду: <strong>@y.LaunchDate.ToString("dd.MM.yyyy")</strong></div>
+                        <div class="small">Довжина: <strong>@y.Length м</strong></div>
                         <div class="mt-1 fw-semibold">@y.Price.ToString("C")</div>
                         <div class="mt-auto pt-2">
-                            <a class="stretched-link" asp-page="./Details" asp-route-id="@y.Id">Details</a>
+                            <a class="stretched-link" asp-page="./Details" asp-route-id="@y.Id">Детальніше</a>
                         </div>
                     </div>
                 </div>

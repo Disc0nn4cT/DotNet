@@ -1,79 +1,58 @@
 @page
 @model RazorPagesYacht.Pages.Admin.Yachts.IndexModel
-
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Керування яхтами";
 }
 
-<h1>Index</h1>
+<h1 class="mb-3">@ViewData["Title"]</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<form>
-    <p>
-        <select asp-for="YachtCategory" asp-items="Model.Categories">
-            <option value="">All</option>
+<form class="row g-2 align-items-end mb-3">
+    <div class="col-12 col-md-3">
+        <a asp-page="Create" class="btn btn-success w-100">+ Додати яхту</a>
+    </div>
+    <div class="col-12 col-md-3">
+        <select asp-for="YachtCategory" asp-items="Model.Categories" class="form-select">
+            <option value="">Усі категорії</option>
         </select>
-        <label>Name: <input type="text" asp-for="SearchString" /></label>
-        <input type="submit" value="Filter" />
-    </p>
+    </div>
+    <div class="col-8 col-md-4">
+        <input type="text" asp-for="SearchString" class="form-control" placeholder="Пошук за назвою" />
+    </div>
+    <div class="col-4 col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Фільтр</button>
+    </div>
 </form>
-<table class="table">
-    <thead>
-        <tr>
 
-            <th>
-                @Html.DisplayNameFor(model => model.Yacht[0].Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Yacht[0].Shipyard)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Yacht[0].Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Yacht[0].LaunchDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Yacht[0].Price)
-            </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.Yacht[0].Length)
-            </th>
-
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Yacht) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Shipyard)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.LaunchDate)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Price)
-            </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Length)
-                </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Yacht[0].Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Yacht[0].Shipyard)</th>
+                <th>@Html.DisplayNameFor(model => model.Yacht[0].Category)</th>
+                <th>@Html.DisplayNameFor(model => model.Yacht[0].LaunchDate)</th>
+                <th>@Html.DisplayNameFor(model => model.Yacht[0].Price)</th>
+                <th>@Html.DisplayNameFor(model => model.Yacht[0].Length)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Yacht)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Shipyard)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                    <td>@Html.DisplayFor(modelItem => item.LaunchDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Length)</td>
+                    <td class="text-end text-nowrap">
+                        <a asp-page="./Edit" asp-route-id="@item.Id">Редагувати</a> |
+                        <a asp-page="./Details" asp-route-id="@item.Id">Деталі</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.Id" class="text-danger">Видалити</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

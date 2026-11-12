@@ -1,17 +1,16 @@
 ﻿@page "{id:int}"
 @model RazorPagesYacht.Pages.Catalog.DetailsModel
 @{
-    ViewData["Title"] = Model.Yacht?.Name ?? "Yacht";
+    ViewData["Title"] = Model.Yacht?.Name ?? "Яхта";
     string Stars(int n) => new string('★', n) + new string('☆', 5 - n);
 }
 
-<a asp-page="./Index" class="btn btn-link ps-0">&larr; Back to catalog</a>
+<a asp-page="./Index" class="btn btn-link ps-0">&larr; До каталогу</a>
 
 <div class="row g-4 align-items-start">
     <div class="col-12 col-md-5 col-lg-4">
         <img src="@(string.IsNullOrEmpty(Model.Yacht?.PhotoPath) ? Url.Content("~/images/placeholder-yacht.svg") : Url.Content(Model.Yacht!.PhotoPath))"
-             alt="Photo of @Model.Yacht?.Name"
-             class="img-fluid rounded shadow-sm"
+             alt="Фото @Model.Yacht?.Name" class="img-fluid rounded shadow-sm"
              style="object-fit:cover; aspect-ratio:4/3;" />
     </div>
     <div class="col">
@@ -22,33 +21,36 @@
             @if (Model.Reviews.Count > 0)
             {
                 <span class="fs-5 text-warning">@Stars((int)Math.Round(Model.AverageRating))</span>
-                <span class="ms-2"><strong>@Model.AverageRating.ToString("0.0")</strong> / 5 (@Model.Reviews.Count reviews)</span>
+                <span class="ms-2">
+                    <strong>@Model.AverageRating.ToString("0.0")</strong> / 5
+                    (@Model.Reviews.Count @Plural.Uk(Model.Reviews.Count, "відгук", "відгуки", "відгуків"))
+                </span>
             }
             else
             {
-                <span class="text-muted">No ratings yet</span>
+                <span class="text-muted">Оцінок ще немає</span>
             }
         </div>
 
         <dl class="row">
-            <dt class="col-sm-3">Shipyard</dt>
-            <dd class="col-sm-9">@Model.Yacht?.Shipyard</dd>
-            <dt class="col-sm-3">Launch date</dt>
-            <dd class="col-sm-9">@Model.Yacht?.LaunchDate.ToString("yyyy-MM-dd")</dd>
-            <dt class="col-sm-3">Length</dt>
-            <dd class="col-sm-9">@Model.Yacht?.Length m</dd>
-            <dt class="col-sm-3">Price</dt>
-            <dd class="col-sm-9">@Model.Yacht?.Price.ToString("C")</dd>
+            <dt class="col-sm-4">Верф</dt>
+            <dd class="col-sm-8">@Model.Yacht?.Shipyard</dd>
+            <dt class="col-sm-4">Дата спуску на воду</dt>
+            <dd class="col-sm-8">@Model.Yacht?.LaunchDate.ToString("dd.MM.yyyy")</dd>
+            <dt class="col-sm-4">Довжина</dt>
+            <dd class="col-sm-8">@Model.Yacht?.Length м</dd>
+            <dt class="col-sm-4">Ціна</dt>
+            <dd class="col-sm-8">@Model.Yacht?.Price.ToString("C")</dd>
         </dl>
 
         <hr class="my-4" />
-        <h3 class="mb-3">Reviews</h3>
+        <h3 class="mb-3">Відгуки</h3>
 
         @if (User.Identity?.IsAuthenticated == true)
         {
             <form method="post" asp-page-handler="SaveReview" asp-route-id="@Model.Yacht!.Id" class="mb-4">
                 <div class="mb-2">
-                    <label class="form-label">Your rating</label>
+                    <label class="form-label">Ваша оцінка</label>
                     <div>
                         @for (int i = 1; i <= 5; i++)
                         {
@@ -62,25 +64,25 @@
                     <span class="text-danger" asp-validation-for="MyRating"></span>
                 </div>
                 <div class="mb-2">
-                    <label class="form-label" for="MyComment">Comment (optional)</label>
+                    <label class="form-label" for="MyComment">Коментар (необов’язково)</label>
                     <textarea id="MyComment" name="MyComment" class="form-control" rows="3" maxlength="2000">@Model.MyComment</textarea>
                     <span class="text-danger" asp-validation-for="MyComment"></span>
                 </div>
-                <button class="btn btn-primary">Save review</button>
+                <button class="btn btn-primary">Зберегти відгук</button>
             </form>
         }
         else
         {
             <div class="alert alert-info">
                 <a asp-area="Identity" asp-page="/Account/Login"
-                   asp-route-returnUrl="@Url.Page("./Details", new { id = Model.Yacht!.Id })">Log in</a>
-                to leave a review.
+                   asp-route-returnUrl="@Url.Page("./Details", new { id = Model.Yacht!.Id })">Увійдіть</a>,
+                щоб залишити відгук.
             </div>
         }
 
         @if (Model.Reviews.Count == 0)
         {
-            <div class="text-muted">No reviews yet.</div>
+            <div class="text-muted">Відгуків ще немає.</div>
         }
         else
         {
@@ -90,14 +92,14 @@
                     <div class="list-group-item">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <strong>@(r.ReviewerName ?? "User")</strong>
+                                <strong>@(r.ReviewerName ?? "Користувач")</strong>
                                 <span class="ms-2 text-warning">@Stars(r.Rating)</span>
                             </div>
                             <small class="text-muted">
-                                @((r.UpdatedAt ?? r.CreatedAt).ToLocalTime().ToString("yyyy-MM-dd HH:mm"))
+                                @((r.UpdatedAt ?? r.CreatedAt).ToLocalTime().ToString("dd.MM.yyyy HH:mm"))
                                 @if (r.UpdatedAt != null)
                                 {
-                                    <span>(edited)</span>
+                                    <span>(змінено)</span>
                                 }
                             </small>
                         </div>
@@ -114,7 +116,7 @@
                                     @(r.AdminReplyBy ?? "Адміністратор")
                                     @if (r.AdminRepliedAt != null)
                                     {
-                                        @($" • {r.AdminRepliedAt.Value.ToLocalTime():yyyy-MM-dd HH:mm}")
+                                        @($" • {r.AdminRepliedAt.Value.ToLocalTime():dd.MM.yyyy HH:mm}")
                                     }
                                 </div>
                             </div>
@@ -123,7 +125,7 @@
                         {
                             <form method="post" asp-page-handler="DeleteReview" asp-route-id="@Model.Yacht!.Id" class="mt-2">
                                 <input type="hidden" name="reviewId" value="@r.Id" />
-                                <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                                <button class="btn btn-sm btn-outline-danger" type="submit">Видалити</button>
                             </form>
                         }
                     </div>

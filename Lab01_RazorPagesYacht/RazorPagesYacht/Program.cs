@@ -33,8 +33,16 @@ builder.Services.AddAuthorization(options =>
 // Close the whole /Yachts folder to everyone except admins
 builder.Services.AddRazorPages(options =>
 {
-
-    options.Conventions.AuthorizeFolder("/Admin", "RequireAdministratorRole"); // whole admin area
+    options.Conventions.AuthorizeFolder("/Admin", "RequireAdministratorRole");
+})
+.AddMvcOptions(o =>
+{
+    // Ukrainian texts for model-binding errors (e.g. letters typed into a number field)
+    var m = o.ModelBindingMessageProvider;
+    m.SetValueMustBeANumberAccessor(field => $"Поле «{field}» має бути числом.");
+    m.SetAttemptedValueIsInvalidAccessor((value, field) => $"Значення «{value}» некоректне для поля «{field}».");
+    m.SetValueMustNotBeNullAccessor(field => $"Поле «{field}» обов’язкове.");
+    m.SetValueIsInvalidAccessor(value => $"Значення «{value}» некоректне.");
 });
 
 
