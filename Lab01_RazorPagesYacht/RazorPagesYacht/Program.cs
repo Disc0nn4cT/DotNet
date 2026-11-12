@@ -33,6 +33,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizeFolder("/Yachts", "RequireAdministratorRole");
+    options.Conventions.AuthorizeFolder("/Admin", "RequireAdministratorRole"); // whole admin area
 });
 
 var app = builder.Build();

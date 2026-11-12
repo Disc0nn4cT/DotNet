@@ -24,5 +24,13 @@ public class Review
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
 
+    [StringLength(2000)]
+    public string? AdminReply { get; set; }        // reply text
+
+    [StringLength(128)]
+    public string? AdminReplyBy { get; set; }      // which admin replied
+
+    public DateTime? AdminRepliedAt { get; set; }  // when
+
     public Yacht? Yacht { get; set; }                  // navigation property
 }
