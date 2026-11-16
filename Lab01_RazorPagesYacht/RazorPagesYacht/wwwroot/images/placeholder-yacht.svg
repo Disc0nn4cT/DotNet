@@ -14,5 +14,5 @@
     <path d="M270 375 L540 375 L505 420 L305 420 Z"/>
   </g>
   <text x="400" y="500" text-anchor="middle" font-family="Segoe UI, Roboto, sans-serif"
-        font-size="34" fill="#7f95a8">No photo yet</text>
+        font-size="34" fill="#7f95a8">Фото ще немає</text>
 </svg>
