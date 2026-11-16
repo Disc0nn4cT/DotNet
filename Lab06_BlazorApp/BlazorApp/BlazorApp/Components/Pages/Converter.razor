@@ -1,0 +1,171 @@
+﻿@page "/converter"
+@rendermode InteractiveServer
+
+<PageTitle>Морський конвертер</PageTitle>
+
+<h3>⚓ Морський конвертер величин</h3>
+<p class="text-muted">Одиниці, якими користуються яхтсмени й моряки.</p>
+
+<div class="converter-card">
+    <div class="mb-3">
+        <label class="form-label">Величина</label>
+        <select class="form-select" @bind="categoryKey" @bind:after="OnCategoryChanged">
+            @foreach (var c in categories)
+            {
+                <option value="@c.Key">@c.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="row g-2 mb-3">
+        <div class="col-md-4">
+            <label class="form-label">Значення</label>
+            <input type="number" step="any" class="form-control" @bind="inputValue" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">З одиниці</label>
+            <select class="form-select" @bind="fromKey">
+                @foreach (var u in Current.Units)
+                {
+                    <option value="@u.Key">@u.Name (@u.Symbol)</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">В одиницю</label>
+            <select class="form-select" @bind="toKey">
+                @foreach (var u in Current.Units)
+                {
+                    <option value="@u.Key">@u.Name (@u.Symbol)</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <button class="btn btn-primary" @onclick="ConvertValue">Конвертувати</button>
+    <button class="btn btn-outline-secondary ms-2" @onclick="Swap">⇄ Поміняти місцями</button>
+
+    @if (error is not null)
+    {
+        <div class="alert alert-danger mt-3">@error</div>
+    }
+    else if (result is not null)
+    {
+        <div class="alert alert-info mt-3 converter-result">@result</div>
+    }
+</div>
+
+@code {
+    // Factor — у скільки разів одиниця більша за базову (м/с для швидкості, метр для відстані й довжини)
+    private record UnitInfo(string Key, string Name, string Symbol, double Factor);
+    private record Category(string Key, string Name, UnitInfo[] Units);
+
+    private static readonly Category[] categories =
+    [
+        new("speed", "Швидкість",
+        [
+            new("kn",  "вузли",               "kn",     1852.0 / 3600),
+            new("kmh", "кілометри за годину", "км/год", 1000.0 / 3600),
+            new("ms",  "метри за секунду",    "м/с",    1.0),
+            new("mph", "милі за годину",      "mph",    1609.344 / 3600)
+        ]),
+        new("distance", "Відстань",
+        [
+            new("nmi", "морські милі",   "nmi", 1852.0),
+            new("km",  "кілометри",      "км",  1000.0),
+            new("mi",  "сухопутні милі", "mi",  1609.344),
+            new("cab", "кабельтови",     "каб", 185.2)
+        ]),
+        new("length", "Довжина яхти / глибина",
+        [
+            new("ft",     "фути",          "ft", 0.3048),
+            new("m",      "метри",         "м",  1.0),
+            new("fathom", "морські сажні", "fm", 1.8288)
+        ]),
+        new("temperature", "Температура води",
+        [
+            new("c", "Цельсій",   "°C", 0),
+            new("f", "Фаренгейт", "°F", 0),
+            new("k", "Кельвін",   "K",  0)
+        ])
+    ];
+
+    private string categoryKey = "speed";
+    private string fromKey = "kn";
+    private string toKey = "kmh";
+    private double? inputValue = 10;
+    private string? result;
+    private string? error;
+
+    private Category Current => categories.First(c => c.Key == categoryKey);
+
+    private void OnCategoryChanged()
+    {
+        fromKey = Current.Units[0].Key;
+        toKey = Current.Units[1].Key;
+        result = null;
+        error = null;
+    }
+
+    private void ConvertValue()
+    {
+        result = null;
+        error = null;
+
+        if (inputValue is null)
+        {
+            error = "Введіть число для перетворення.";
+            return;
+        }
+
+        var from = Current.Units.First(u => u.Key == fromKey);
+        var to = Current.Units.First(u => u.Key == toKey);
+        double value = inputValue.Value;
+        double converted;
+
+        if (categoryKey == "temperature")
+        {
+            double celsius = ToCelsius(value, from.Key);
+            if (celsius < -273.15 - 1e-9)
+            {
+                error = "Температура не може бути нижчою за абсолютний нуль (−273,15 °C).";
+                return;
+            }
+            converted = FromCelsius(celsius, to.Key);
+        }
+        else
+        {
+            if (value < 0)
+            {
+                error = "Швидкість, відстань і довжина не можуть бути від’ємними.";
+                return;
+            }
+            converted = value * from.Factor / to.Factor;
+        }
+
+        result = $"{value:0.####} {from.Symbol} = {converted:0.####} {to.Symbol}";
+    }
+
+    private void Swap()
+    {
+        (fromKey, toKey) = (toKey, fromKey);
+        if (result is not null)
+        {
+            ConvertValue();
+        }
+    }
+
+    private static double ToCelsius(double v, string unit) => unit switch
+    {
+        "f" => (v - 32) * 5 / 9,
+        "k" => v - 273.15,
+        _ => v
+    };
+
+    private static double FromCelsius(double c, string unit) => unit switch
+    {
+        "f" => c * 9 / 5 + 32,
+        "k" => c + 273.15,
+        _ => c
+    };
+}

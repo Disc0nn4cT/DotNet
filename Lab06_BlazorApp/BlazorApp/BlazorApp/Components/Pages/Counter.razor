@@ -1,0 +1,20 @@
+﻿@page "/counter"
+@rendermode InteractiveServer
+
+<h1>Лічильник</h1>
+
+<p role="status">Поточне значення: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Натисни</button>
+
+@code {
+    private int currentCount = 0;
+
+    [Parameter]
+    public int IncrementAmount { get; set; } = 1;
+
+    private void IncrementCount()
+    {
+        currentCount += IncrementAmount;
+    }
+}

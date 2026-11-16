@@ -1,0 +1,35 @@
+﻿@page "/todo"
+@rendermode InteractiveServer
+
+<PageTitle>Список справ</PageTitle>
+
+<h3>Список справ (@todos.Count(todo => !todo.IsDone))</h3>
+
+<ul class="todo-list">
+    @foreach (var todo in todos)
+    {
+        <li class="@(todo.IsDone ? "done" : null)">
+            <input type="checkbox" @bind="todo.IsDone" />
+            <input class="todo-title" @bind="todo.Title" />
+        </li>
+    }
+</ul>
+
+<div class="add-row">
+    <input class="form-control" placeholder="Що потрібно зробити?" @bind="newTodo" />
+    <button class="btn btn-primary" @onclick="AddTodo">Додати</button>
+</div>
+
+@code {
+    private List<TodoItem> todos = new();
+    private string? newTodo;
+
+    private void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(newTodo))
+        {
+            todos.Add(new TodoItem { Title = newTodo });
+            newTodo = string.Empty;
+        }
+    }
+}
