@@ -75,6 +75,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStatusCodePagesWithReExecute("/StatusCode", "?code={0}");  // friendly 404/403 pages
 app.UseRequestLocalization("en-US");
 app.UseStaticFiles();      // needed later for uploaded photos
 app.UseRouting();

@@ -20,7 +20,7 @@ public static class SeedData
     {
         Name = "Borealis",
         Shipyard = "Aperture Science",
-        Category = "Research Vessel",
+        Category = "Дослідницьке судно",
         LaunchDate = new DateTime(2007, 10, 10), 
         Price = 0.00M,
         Length = 120.00M
@@ -29,7 +29,7 @@ public static class SeedData
     {
         Name = "Undra",
         Shipyard = "GlobeMaster",
-        Category = "Explorer Yacht",
+        Category = "Експедиційна яхта",
         LaunchDate = new DateTime(2023, 1, 1),   
         Price = 1000000.00M,
         Length = 15.24M
@@ -38,7 +38,7 @@ public static class SeedData
     {
         Name = "Elco 26",
         Shipyard = "Elco",
-        Category = "Motor Launch",
+        Category = "Моторний катер",
         LaunchDate = new DateTime(1992, 1, 1),
         Price = 80000.00M,
         Length = 7.92M
@@ -47,7 +47,7 @@ public static class SeedData
     {
         Name = "Maryland 37",
         Shipyard = "Fountaine Pajot",
-        Category = "Power Catamaran",
+        Category = "Моторний катамаран",
         LaunchDate = new DateTime(2005, 1, 1),
         Price = 229900.00M,
         Length = 11.28M
@@ -56,7 +56,7 @@ public static class SeedData
     {
         Name = "Leviathan",
         Shipyard = "Oceanco",
-        Category = "Research Vessel",
+        Category = "Дослідницьке судно",
         LaunchDate = new DateTime(2025, 8, 1),    
         Price = 500000000.00M,
         Length = 111.00M

@@ -1,24 +1,49 @@
+/* ===== RpYacht sea theme ===== */
+:root {
+    --sea-deep: #0b2545; /* deep water: navbar, footer, headings */
+    --sea: #13315c;
+    --sea-mid: #1d5c8a; /* main accent: buttons, links */
+    --wave: #3e8ed0;
+    --foam: #eef4fa; /* page background */
+    --sand: #f6ecdc; /* admin reply block */
+    --gold: #e0a526; /* stars, accents */
+}
+
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 70px;
+    background: var(--foam);
+    color: #1b2a3a;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+h1, h2, h3 {
+    color: var(--sea-deep);
+}
+
+a {
+    color: var(--sea-mid);
+}
+
+    a:hover {
+        color: var(--sea);
+    }
+
+/* Focus ring (keeps keyboard navigation visible) */
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus,
+.form-control:focus, .form-select:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem #fff, 0 0 0 0.25rem var(--wave);
 }
 
 /* Floating labels: the label itself is the hint, so the placeholder stays hidden */
@@ -26,3 +51,119 @@ body {
 .form-floating > .form-control::placeholder {
     color: transparent;
 }
+
+/* ---- Navbar ---- */
+.navbar-sea {
+    background: linear-gradient(90deg, var(--sea-deep), var(--sea-mid));
+}
+
+    .navbar-sea .navbar-brand {
+        font-weight: 700;
+        letter-spacing: .02em;
+    }
+
+    .navbar-sea .nav-link,
+    .navbar-sea .btn-link.nav-link {
+        color: rgba(255, 255, 255, .85);
+    }
+
+        .navbar-sea .nav-link:hover,
+        .navbar-sea .nav-link:focus,
+        .navbar-sea .btn-link.nav-link:hover {
+            color: #fff;
+        }
+
+/* ---- Buttons in the sea palette ---- */
+.btn-primary {
+    --bs-btn-bg: var(--sea-mid);
+    --bs-btn-border-color: var(--sea-mid);
+    --bs-btn-hover-bg: var(--sea);
+    --bs-btn-hover-border-color: var(--sea);
+    --bs-btn-active-bg: var(--sea-deep);
+    --bs-btn-active-border-color: var(--sea-deep);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--sea-mid);
+    --bs-btn-border-color: var(--sea-mid);
+    --bs-btn-hover-bg: var(--sea-mid);
+    --bs-btn-hover-border-color: var(--sea-mid);
+    --bs-btn-active-bg: var(--sea);
+}
+
+/* ---- Home page hero ---- */
+.hero {
+    background: linear-gradient(135deg, var(--sea-deep) 0%, var(--sea-mid) 60%, var(--wave) 100%);
+    color: #fff;
+    border-radius: 1rem;
+}
+
+    .hero h1 {
+        color: #fff;
+    }
+
+    .hero .lead {
+        color: rgba(255, 255, 255, .9);
+    }
+
+    .hero .text-muted {
+        color: rgba(255, 255, 255, .75) !important;
+    }
+
+    .hero .btn-outline-secondary {
+        --bs-btn-color: #fff;
+        --bs-btn-border-color: rgba(255, 255, 255, .7);
+        --bs-btn-hover-bg: #fff;
+        --bs-btn-hover-color: var(--sea-deep);
+        --bs-btn-hover-border-color: #fff;
+    }
+
+/* ---- Cards ---- */
+.card {
+    border-radius: .9rem;
+    overflow: hidden;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 .75rem 1.5rem rgba(11, 37, 69, .15) !important;
+    }
+
+/* ---- Tables (admin pages) ---- */
+.table {
+    --bs-table-bg: #fff;
+    border-radius: .5rem;
+    overflow: hidden;
+}
+
+    .table thead th {
+        --bs-table-bg: var(--sea-deep);
+        color: #fff;
+        border: 0;
+    }
+
+/* ---- Stars and admin reply ---- */
+.text-warning {
+    color: var(--gold) !important;
+}
+
+.admin-reply {
+    background: var(--sand);
+    border-left: 4px solid var(--gold);
+}
+
+/* ---- Footer ---- */
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+    background: var(--sea-deep);
+    color: rgba(255, 255, 255, .75) !important;
+}
+
+    .footer a {
+        color: #fff;
+    }

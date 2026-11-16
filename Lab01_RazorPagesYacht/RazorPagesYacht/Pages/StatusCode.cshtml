@@ -1,0 +1,16 @@
+﻿@page
+@{
+    var code = Request.Query["code"].ToString();
+    var notFound = code == "404";
+    ViewData["Title"] = notFound ? "Сторінку не знайдено" : "Помилка";
+}
+
+<div class="text-center py-5">
+    <div class="display-1 fw-bold" style="color:var(--sea-mid)">@(string.IsNullOrEmpty(code) ? "⚓" : code)</div>
+    <h1 class="h3 mb-3">@(notFound ? "Сторінку не знайдено" : "Щось пішло не так")</h1>
+    <p class="text-muted mb-4">
+        @(notFound ? "Схоже, це судно відпливло, або адресу введено з помилкою." : "Спробуйте ще раз трохи пізніше.")
+    </p>
+    <a asp-page="/Index" class="btn btn-primary">На головну</a>
+    <a asp-page="/Catalog/Index" class="btn btn-outline-primary">До каталогу</a>
+</div>
