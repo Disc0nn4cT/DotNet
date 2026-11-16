@@ -1,0 +1,105 @@
+﻿@model IEnumerable<TodoMvc.Models.TodoItem>
+@using TodoMvc.Models
+@{
+    ViewData["Title"] = "Мої завдання";
+    var q = ViewBag.Q as string;
+    bool? showDone = ViewBag.ShowDone as bool?;
+    string sort = ViewBag.Sort as string ?? "created_desc";
+}
+
+<h1 class="mb-3">Мої завдання</h1>
+
+@* Task 4: the "Add" button is above the search *@
+<div class="mb-3">
+    <a class="btn btn-success" asp-action="Create">+ Додати завдання</a>
+</div>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <input name="q" value="@q" class="form-control" placeholder="Пошук за назвою або описом..." />
+    </div>
+    <div class="col-md-3">
+        <select name="showDone" class="form-select">
+            <option value="" selected="@(showDone is null ? "selected" : null)">Показати всі</option>
+            <option value="false" selected="@(showDone == false ? "selected" : null)">Тільки невиконані</option>
+            <option value="true" selected="@(showDone == true ? "selected" : null)">Тільки виконані</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select name="sort" class="form-select">
+            <option value="created_desc" selected="@(sort == "created_desc" ? "selected" : null)">Нові зверху</option>
+            <option value="created_asc" selected="@(sort == "created_asc" ? "selected" : null)">Старі зверху</option>
+            <option value="due_asc" selected="@(sort == "due_asc" ? "selected" : null)">Дедлайн ↑</option>
+            <option value="due_desc" selected="@(sort == "due_desc" ? "selected" : null)">Дедлайн ↓</option>
+            <option value="prio_asc" selected="@(sort == "prio_asc" ? "selected" : null)">Пріоритет ↑</option>
+            <option value="prio_desc" selected="@(sort == "prio_desc" ? "selected" : null)">Пріоритет ↓</option>
+        </select>
+    </div>
+    <div class="col-md-2 d-grid">
+        <button class="btn btn-primary" type="submit">Застосувати</button>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Немає завдань за обраними критеріями.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th style="width:70px;">Готово</th>
+                <th>Завдання</th>
+                <th style="width:140px;">Дедлайн</th>
+                <th style="width:120px;">Пріоритет</th>
+                <th style="width:200px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model)
+            {
+                var overdue = !t.IsDone && t.DueAt.HasValue && t.DueAt.Value.Date < DateTime.Today;
+                var badge = t.Priority switch
+                {
+                    Priority.High => "text-bg-danger",
+                    Priority.Medium => "text-bg-warning",
+                    _ => "text-bg-secondary"
+                };
+                <tr class="@(t.IsDone ? "table-success" : "")">
+                    <td>
+                        <form asp-action="Toggle" asp-route-id="@t.Id" method="post">
+                            <button class="btn btn-sm @(t.IsDone ? "btn-success" : "btn-outline-secondary")" type="submit"
+                                    title="@(t.IsDone ? "Позначити невиконаним" : "Позначити виконаним")">
+                                @(t.IsDone ? "✓" : "—")
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <strong class="@(t.IsDone ? "text-decoration-line-through" : "")">@t.Title</strong>
+                        @if (!string.IsNullOrWhiteSpace(t.Description))
+                        {
+                            <div class="small" style="white-space:pre-wrap">@t.Description</div>
+                        }
+                        <div class="text-muted small">Створено: @t.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div>
+                    </td>
+                    <td class="@(overdue ? "text-danger fw-semibold" : "")">
+                        @(t.DueAt?.ToString("dd.MM.yyyy") ?? "—")
+                        @if (overdue)
+                        {
+                            <div class="small">прострочено</div>
+                        }
+                    </td>
+                    <td><span class="badge @badge">@t.Priority.GetDisplayName()</span></td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@t.Id">Змінити</a>
+                        <form asp-action="Delete" asp-route-id="@t.Id" method="post" class="d-inline"
+                              onsubmit="return confirm('Видалити завдання?');">
+                            <button class="btn btn-sm btn-danger" type="submit">Видалити</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
