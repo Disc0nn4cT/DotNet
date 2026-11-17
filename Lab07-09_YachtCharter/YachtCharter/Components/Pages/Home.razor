@@ -1,0 +1,68 @@
+@page "/"
+<PageTitle>Каталог · Яхт-чартер «Вітрило»</PageTitle>
+
+<section class="hero">
+    <p class="eyebrow">Оренда яхт · Чорне море</p>
+    <h1>Яхт-чартер «Вітрило»</h1>
+    <p>Оберіть яхту, тривалість оренди та екіпаж. Поки що зберігаємо лише останній вибір.</p>
+</section>
+
+<div class="catalog">
+    @foreach (var yacht in yachts)
+    {
+        <YachtCard @key="yacht.Id" Yacht="yacht" OnSelect="SelectYacht" />
+    }
+</div>
+
+<section class="last-selection" aria-live="polite">
+    <h2>Останній підтверджений вибір</h2>
+    @if (lastSelection is null)
+    {
+        <p>Ви ще нічого не підтвердили.</p>
+    }
+    else
+    {
+        <p>
+            @lastSelection.YachtName · @YachtDraft.DaysText(lastSelection.Days) ·
+            @lastSelection.Crew · яхт: @lastSelection.Quantity
+        </p>
+        <p>За одну яхту: <MoneyLabel Amount="lastSelection.UnitPrice" /></p>
+        <strong>Разом: <MoneyLabel Amount="lastSelection.Total" /></strong>
+    }
+</section>
+
+@if (selectedYacht is not null)
+{
+    <ConfigureYachtDialog @key="selectedYacht.Id" Yacht="selectedYacht"
+                          OnCancel="CloseDialog" OnConfirm="ConfirmYacht" />
+}
+
+@code {
+    private Yacht? selectedYacht;      // яка яхта зараз налаштовується (керує показом діалогу)
+    private OrderLine? lastSelection;  // останній підтверджений вибір
+
+    private readonly List<Yacht> yachts = new()
+    {
+        new() { Id = 1, Name = "Бриз", Type = "Вітрильна яхта", Cabins = 3, ImageUrl = "images/yacht-1.svg",
+                Description = "Компактна вітрильна яхта для першого чартеру.", BasePrice = 4500m },
+        new() { Id = 2, Name = "Альбатрос", Type = "Вітрильна яхта", Cabins = 4, ImageUrl = "images/yacht-2.svg",
+                Description = "Простора вітрильна яхта для сімейних походів.", BasePrice = 6500m },
+        new() { Id = 3, Name = "Дельфін", Type = "Катамаран", Cabins = 4, ImageUrl = "images/yacht-3.svg",
+                Description = "Стійкий катамаран із великим салоном.", BasePrice = 9000m },
+        new() { Id = 4, Name = "Чорноморець", Type = "Катамаран", Cabins = 6, ImageUrl = "images/yacht-4.svg",
+                Description = "Великий катамаран для компанії друзів.", BasePrice = 12000m },
+        new() { Id = 5, Name = "Хвиля", Type = "Моторна яхта", Cabins = 2, ImageUrl = "images/yacht-5.svg",
+                Description = "Швидка моторна яхта для коротких прогулянок.", BasePrice = 11000m },
+        new() { Id = 6, Name = "Аврора", Type = "Моторна яхта", Cabins = 3, ImageUrl = "images/yacht-6.svg",
+                Description = "Комфортна моторна яхта з флайбриджем.", BasePrice = 15000m }
+    };
+
+    private void SelectYacht(Yacht yacht) => selectedYacht = yacht;
+    private void CloseDialog() => selectedYacht = null;
+
+    private void ConfirmYacht(OrderLine line)
+    {
+        lastSelection = line;   // новий вибір замінює попередній
+        CloseDialog();
+    }
+}

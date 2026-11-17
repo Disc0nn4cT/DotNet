@@ -1,0 +1,24 @@
+<article class="yacht-card">
+    <div class="yacht-art">
+        <img src="@Yacht.ImageUrl" alt="" />
+        <strong class="price-badge">від <MoneyLabel Amount="Yacht.BasePrice" /> / доба</strong>
+    </div>
+    <div class="card-body">
+        <span class="yacht-type">@Yacht.Type · кают: @Yacht.Cabins</span>
+        <h2>@Yacht.Name</h2>
+        <p>@Yacht.Description</p>
+        <div class="card-footer">
+            <span>Оберіть тривалість і екіпаж</span>
+            <button type="button" @onclick="SelectAsync"
+                    aria-label="@($"Налаштувати оренду {Yacht.Name}")">Обрати</button>
+        </div>
+    </div>
+</article>
+
+@code {
+    [Parameter, EditorRequired] public Yacht Yacht { get; set; } = default!;
+    [Parameter] public EventCallback<Yacht> OnSelect { get; set; }
+
+    // Картка не вирішує, що робити далі, — лише повідомляє батьківський компонент.
+    private Task SelectAsync() => OnSelect.InvokeAsync(Yacht);
+}

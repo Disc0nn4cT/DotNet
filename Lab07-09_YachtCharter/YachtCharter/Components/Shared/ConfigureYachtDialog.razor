@@ -1,0 +1,48 @@
+<div class="modal-backdrop">
+    <section class="configure-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+        <header>
+            <span class="eyebrow">@Yacht.Type · кают: @Yacht.Cabins</span>
+            <h2 id="dialog-title">@Yacht.Name</h2>
+            <p>@Yacht.Description</p>
+        </header>
+        <div class="dialog-fields">
+            <label for="days">Тривалість оренди</label>
+            <select id="days" @bind="draft.Days">
+                <option value="1">1 доба — базова ціна</option>
+                <option value="3">3 доби</option>
+                <option value="7">Тиждень (7 діб) — 7-ма доба в подарунок</option>
+            </select>
+
+            <label for="crew">Екіпаж</label>
+            <select id="crew" @bind="draft.Crew">
+                <option value="@CrewKind.Bareboat">Без шкіпера (є посвідчення) — без доплати</option>
+                <option value="@CrewKind.Skipper">Зі шкіпером — +1 500 ₴ / доба</option>
+                <option value="@CrewKind.FullCrew">Шкіпер і кок — +2 500 ₴ / доба</option>
+            </select>
+
+            <label for="quantity">Кількість яхт: @draft.Quantity</label>
+            <input id="quantity" type="range" min="1" max="10" step="1"
+                   @bind="draft.Quantity" @bind:event="oninput" />
+
+            <div class="price-preview" aria-live="polite">
+                <span>Оплачуваних діб: @draft.GetBilledDays()</span>
+                <span>За одну яхту: <MoneyLabel Amount="draft.GetUnitPrice(Yacht)" /></span>
+                <strong>Разом: <MoneyLabel Amount="@(draft.GetUnitPrice(Yacht) * draft.Quantity)" /></strong>
+            </div>
+        </div>
+        <footer>
+            <button type="button" class="secondary" @onclick="OnCancel">Скасувати</button>
+            <button type="button" @onclick="ConfirmAsync">Підтвердити вибір</button>
+        </footer>
+    </section>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public Yacht Yacht { get; set; } = default!;
+    [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public EventCallback<OrderLine> OnConfirm { get; set; }
+
+    private readonly YachtDraft draft = new();
+
+    private Task ConfirmAsync() => OnConfirm.InvokeAsync(draft.CreateLine(Yacht));
+}
