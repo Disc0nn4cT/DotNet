@@ -1,6 +1,9 @@
 @using System.Globalization
-<span>@Amount.ToString("N2", CultureInfo.GetCultureInfo("uk-UA")) ₴</span>
+<span>@Amount.ToString("N2", CultureInfo.GetCultureInfo("uk-UA")) @Shop.CurrencySymbol</span>
 
 @code {
     [Parameter] public decimal Amount { get; set; }
+
+    // Значення приходить з <CascadingValue> у MainLayout, а не від батьківського компонента.
+    [CascadingParameter] public ShopSettings Shop { get; set; } = default!;
 }

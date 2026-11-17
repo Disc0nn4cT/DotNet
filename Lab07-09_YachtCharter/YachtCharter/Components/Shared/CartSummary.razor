@@ -1,0 +1,43 @@
+@implements IDisposable
+@inject OrderState Order
+
+<aside class="cart" aria-label="Кошик">
+    <span class="eyebrow">Ваша флотилія</span>
+    <h2>Кошик <span class="count">@Order.Count</span></h2>
+    @if (Order.Items.Count == 0)
+    {
+        <p class="empty-cart">Оберіть яхту в каталозі.<br />Вона з’явиться тут після підтвердження.</p>
+    }
+    else
+    {
+        <ul class="cart-items">
+            @foreach (var item in Order.Items)
+            {
+                <li @key="item.Id">
+                    <strong>@item.YachtName</strong>
+                    <p>@YachtDraft.DaysText(item.Days) · @item.Crew · яхт: @item.Quantity</p>
+                    <div class="cart-line-footer">
+                        <MoneyLabel Amount="item.Total" />
+                        <button type="button" class="text-button" @onclick="() => Order.Remove(item.Id)"
+                                aria-label="@($"Видалити {item.YachtName}")">Видалити</button>
+                    </div>
+                </li>
+            }
+        </ul>
+        <div class="cart-total" aria-live="polite">
+            <span>До сплати</span><strong><MoneyLabel Amount="Order.Total" /></strong>
+        </div>
+        <button type="button" class="secondary full-width" @onclick="Order.Clear">Очистити кошик</button>
+    }
+    <p class="cart-note">Навчальний кошик. Оплата та збереження замовлень не виконуються.</p>
+</aside>
+
+@code {
+    // Підписка на подію сервісу: кошик перемальовується, хоч би хто його змінив.
+    protected override void OnInitialized() => Order.Changed += Refresh;
+
+    private void Refresh() => _ = InvokeAsync(StateHasChanged);
+
+    // Відписка, щоб сервіс не тримав посилання на вже знищений компонент.
+    public void Dispose() => Order.Changed -= Refresh;
+}

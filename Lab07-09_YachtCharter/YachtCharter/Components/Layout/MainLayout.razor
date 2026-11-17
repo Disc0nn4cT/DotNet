@@ -1,16 +1,23 @@
 @inherits LayoutComponentBase
 
-<header class="site-header">
-    <a class="brand" href="/"><span>⛵</span> Яхт-чартер «Вітрило»</a>
-    <nav aria-label="Основна навігація">
-        <NavLink href="/" Match="NavLinkMatch.All">Каталог</NavLink>
-    </nav>
-</header>
-<main class="page-shell">@Body</main>
-<footer class="site-footer">Навчальний проєкт ЛНТУ · Глухманюк В. В., ІПЗ-42 · Ціни у гривнях</footer>
+<CascadingValue Value="settings" IsFixed="true">
+    <header class="site-header">
+        <a class="brand" href="/" aria-label="@($"{settings.Name} — головна")"><span aria-hidden="true">⛵</span> @settings.Name</a>
+        <nav aria-label="Основна навігація">
+            <NavLink href="/" Match="NavLinkMatch.All">Каталог</NavLink>
+            <NavLink href="/about">Про чартер</NavLink>
+        </nav>
+    </header>
+    <main class="page-shell">@Body</main>
+    <footer class="site-footer">@settings.Name · Навчальний проєкт ЛНТУ · Глухманюк В. В., ІПЗ-42 · Ціни у гривнях</footer>
+</CascadingValue>
 
 <div id="blazor-error-ui" data-nosnippet>
-    Роботу застосунку перервано.
+    З’єднання або роботу застосунку перервано.
     <a href="." class="reload">Перезавантажити сторінку</a>
     <span class="dismiss">×</span>
 </div>
+
+@code {
+    private readonly ShopSettings settings = new();
+}
