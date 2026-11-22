@@ -23,6 +23,13 @@ else
         </ul>
         <p class="review-total">Разом: <MoneyLabel Amount="order.Total" /></p>
         <p>Замовлення збережено. Оплата не проводилася.</p>
+        @if (!string.IsNullOrEmpty(order.CustomerName))
+        {
+            <h2>Клієнт і прибуття</h2>
+            <p>@order.CustomerName · @order.Phone</p>
+            <p>@(string.IsNullOrEmpty(order.DeliveryAddress) ? "Самостійно до марини" : $"Трансфер з адреси: {order.DeliveryAddress}")</p>
+            @if (!string.IsNullOrEmpty(order.Comment)) { <p class="order-comment">@order.Comment</p> }
+        }
     </article>
 }
 <a class="back-link" href="/orders">До списку замовлень</a>

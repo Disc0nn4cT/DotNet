@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using YachtCharter.Data;
 using YachtCharter.Models;
@@ -9,8 +10,16 @@ public class PurchaseService(
     IDbContextFactory<OrderDbContext> factory,
     CatalogService catalog)
 {
-    public async Task<int> PlaceAsync(IReadOnlyList<OrderLine> lines, Guid requestId)
+    public async Task<int> PlaceAsync(IReadOnlyList<OrderLine> lines, Guid requestId, CheckoutInput input)
     {
+        // 0. Сервіс перевіряє дані покупця незалежно від наявності EditForm.
+        ArgumentNullException.ThrowIfNull(input);
+        // Чи потрібне посвідчення — визначаємо за складом замовлення, а не довіряємо формі.
+        input.RequiresLicense = lines.Any(l => l.Crew == YachtDraft.CrewName(CrewKind.Bareboat));
+        var errors = new List<ValidationResult>();
+        if (!Validator.TryValidateObject(input, new ValidationContext(input), errors, validateAllProperties: true))
+            throw new ArgumentException(string.Join(" ", errors.Select(e => e.ErrorMessage)));
+
         // 1. Порожній ключ не може позначати конкретну спробу оформлення.
         if (requestId == Guid.Empty)
             throw new ArgumentException("Відсутній ідентифікатор операції.");
@@ -25,7 +34,21 @@ public class PurchaseService(
             throw new ArgumentException("Замовлення має містити від 1 до 50 позицій.");
 
         var products = (await catalog.GetYachtsAsync()).ToDictionary(p => p.Id);
-        var order = new PurchaseOrder { RequestId = requestId, CreatedUtc = DateTime.UtcNow };
+        var comment = (input.Comment ?? "").Trim();
+        if (input.RequiresLicense)
+            comment = ("Посвідчення шкіпера підтверджено. " + comment).Trim();
+
+        // Переносимо лише дозволені дані з тимчасової моделі до постійної сутності.
+        var order = new PurchaseOrder
+        {
+            RequestId = requestId,
+            CreatedUtc = DateTime.UtcNow,
+            CustomerName = input.Name.Trim(),
+            Phone = input.Phone,
+            // Для самостійного прибуття стара адреса з моделі не зберігається.
+            DeliveryAddress = input.Fulfillment == FulfillmentKind.Delivery ? input.Address.Trim() : "",
+            Comment = comment
+        };
 
         foreach (var line in lines)
         {

@@ -1,34 +1,68 @@
 @page "/checkout"
+@implements IDisposable
 @inject OrderState Cart
 @inject PurchaseService Purchases
 @inject NavigationManager Navigation
 @inject ILogger<Checkout> Logger
 
-<PageTitle>Перевірка замовлення · Яхт-чартер «Вітрило»</PageTitle>
-<h1>Перевірка замовлення</h1>
-<p>Навчальне замовлення оренди без оплати. Форму покупця додамо в наступній роботі.</p>
+<PageTitle>Оформлення оренди · Яхт-чартер «Вітрило»</PageTitle>
+<h1>Оформлення оренди</h1>
+<p>Використовуйте лише вигадані навчальні дані (наприклад, телефон +380000000000). Оплата не проводиться.</p>
 @if (Cart.Items.Count == 0)
 {
     <p class="panel">Кошик порожній. <a href="/">Повернутися до каталогу</a></p>
 }
 else
 {
-    <div class="panel">
-        <OrderReview Items="Cart.Items" />
-        @if (error is not null) { <p role="alert" class="validation-message">@error</p> }
-        <button type="button" disabled="@isSubmitting" @onclick="PlaceOrderAsync">
-            @(isSubmitting ? "Збереження…" : "Зберегти замовлення")
-        </button>
-        <a class="back-link" href="/">Повернутися до каталогу</a>
-    </div>
+    <EditForm EditContext="editContext" OnValidSubmit="PlaceOrderAsync"
+              OnInvalidSubmit="ShowInvalid" FormName="checkout">
+        <DataAnnotationsValidator />
+        <div class="checkout-grid">
+            <section class="panel">
+                <h2>Ваша флотилія</h2>
+                <OrderReview Items="Cart.Items" />
+            </section>
+            <section class="panel">
+                <h2>Дані клієнта</h2>
+                <fieldset disabled="@isSubmitting">
+                    <CustomerFields Input="input" />
+                </fieldset>
+                <ValidationSummary />
+                @if (error is not null) { <p role="alert" class="validation-message">@error</p> }
+                <p class="form-hint">@(hasChanges ? "Ви змінили дані форми." : "Заповніть форму.")</p>
+                <button type="submit" disabled="@isSubmitting">
+                    @(isSubmitting ? "Збереження…" : "Підтвердити замовлення")
+                </button>
+                <a class="back-link" href="/">Повернутися до каталогу</a>
+            </section>
+        </div>
+    </EditForm>
 }
 
 @code {
+    private readonly CheckoutInput input = new();   // один екземпляр, який редагує користувач
+    private EditContext editContext = default!;
+    private bool hasChanges;
     private bool isSubmitting;
     private string? error;
-
-    // Один ключ на екземпляр сторінки: повторна спроба не створить другий запис.
     private readonly Guid requestId = Guid.NewGuid();
+
+    protected override void OnInitialized()
+    {
+        // Чекбокс посвідчення показуємо, лише якщо в кошику є оренда без шкіпера.
+        input.RequiresLicense = Cart.Items.Any(i => i.Crew == YachtDraft.CrewName(CrewKind.Bareboat));
+        editContext = new EditContext(input);
+        editContext.OnFieldChanged += FieldChanged;
+    }
+
+    private void FieldChanged(object? sender, FieldChangedEventArgs args)
+    {
+        hasChanges = editContext.IsModified();
+        error = null;
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    private void ShowInvalid(EditContext _) => error = "Виправте позначені поля та повторіть спробу.";
 
     private async Task PlaceOrderAsync()
     {
@@ -37,7 +71,7 @@ else
         error = null;
         try
         {
-            var id = await Purchases.PlaceAsync(Cart.Items.ToArray(), requestId);
+            var id = await Purchases.PlaceAsync(Cart.Items.ToArray(), requestId, input);
             Cart.Clear();                          // тільки після успішного збереження
             Navigation.NavigateTo($"/orders/{id}");
         }
@@ -50,4 +84,6 @@ else
         }
         finally { isSubmitting = false; }
     }
+
+    public void Dispose() => editContext.OnFieldChanged -= FieldChanged;
 }

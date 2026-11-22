@@ -1,0 +1,50 @@
+<div class="form-fields">
+    <label for="customer-name">Ім’я</label>
+    <InputText id="customer-name" @ref="nameInput" @bind-Value="Input.Name" autocomplete="off" />
+    <ValidationMessage For="@(() => Input.Name)" />
+
+    <label for="customer-phone">Телефон</label>
+    <InputText id="customer-phone" @bind-Value="Input.Phone" type="tel" placeholder="+380000000000" autocomplete="off" />
+    <ValidationMessage For="@(() => Input.Phone)" />
+
+    <label for="fulfillment">Як ви прибудете до марини</label>
+    <InputSelect id="fulfillment" @bind-Value="Input.Fulfillment">
+        <option value="@FulfillmentKind.Pickup">Самостійно, до причалу в марині</option>
+        <option value="@FulfillmentKind.Delivery">Трансфер до марини (потрібна адреса)</option>
+    </InputSelect>
+    <ValidationMessage For="@(() => Input.Fulfillment)" />
+
+    @if (Input.Fulfillment == FulfillmentKind.Delivery)
+    {
+        <label for="customer-address">Адреса, звідки забрати</label>
+        <InputText id="customer-address" @bind-Value="Input.Address" autocomplete="off" />
+        <ValidationMessage For="@(() => Input.Address)" />
+    }
+
+    @if (Input.RequiresLicense)
+    {
+        <label class="checkbox-label" for="skipper-license">
+            <InputCheckbox id="skipper-license" @bind-Value="Input.HasSkipperLicense" />
+            У мене є посвідчення шкіпера (для оренди без шкіпера)
+        </label>
+        <ValidationMessage For="@(() => Input.HasSkipperLicense)" />
+    }
+
+    <label for="customer-comment">Коментар</label>
+    <InputTextArea id="customer-comment" @bind-Value="Input.Comment" rows="3" />
+    <ValidationMessage For="@(() => Input.Comment)" />
+</div>
+
+@code {
+    // Той самий об'єкт, що й у сторінки Checkout: копія моделі тут не створюється.
+    [Parameter, EditorRequired] public CheckoutInput Input { get; set; } = default!;
+
+    private InputText? nameInput;
+
+    // Фокус можна поставити лише після першого рендерингу, коли HTML-елемент уже існує.
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && nameInput?.Element is { } element)
+            await element.FocusAsync();
+    }
+}
