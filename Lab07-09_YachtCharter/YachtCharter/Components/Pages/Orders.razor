@@ -15,14 +15,15 @@ else if (orders.Count == 0) { <p class="state-message">Замовлень ще �
 else
 {
     <div class="orders-list">
-        @foreach (var order in orders)
-        {
+        <PagedList TItem="PurchaseOrder" Items="orders" PageSize="3">
+            <ItemTemplate Context="order">
             <article class="panel order-card" @key="order.Id">
                 <h2><a href="@($"/orders/{order.Id}")">Замовлення №@order.Id</a></h2>
                 <p>@order.CreatedUtc.ToString("dd.MM.yyyy HH:mm") UTC · позицій: @order.Items.Count · яхт: @order.Items.Sum(i => i.Quantity)</p>
                 <strong><MoneyLabel Amount="order.Total" /></strong>
             </article>
-        }
+            </ItemTemplate>
+        </PagedList>
     </div>
 }
 

@@ -1,5 +1,6 @@
 @implements IDisposable
 @inject OrderState Order
+@inject IJSRuntime JS
 
 <aside class="cart" aria-label="Кошик">
     <span class="eyebrow">Ваша флотилія</span>
@@ -18,7 +19,7 @@
                     <p>@YachtDraft.DaysText(item.Days) · @item.Crew · яхт: @item.Quantity</p>
                     <div class="cart-line-footer">
                         <MoneyLabel Amount="item.Total" />
-                        <button type="button" class="text-button" @onclick="() => Order.Remove(item.Id)"
+                        <button type="button" class="text-button" @onclick="() => ConfirmRemoveAsync(item)"
                                 aria-label="@($"Видалити {item.YachtName}")">Видалити</button>
                     </div>
                 </li>
@@ -31,6 +32,7 @@
         <a class="button-link checkout-link" href="/checkout">Перевірити замовлення</a>
     }
     <p class="cart-note">Кошик тимчасовий. Замовлення зберігається після підтвердження на окремій сторінці. Оплати немає.</p>
+    @if (jsError is not null) { <p role="alert" class="cart-note">@jsError</p> }
 </aside>
 
 @code {
@@ -41,4 +43,20 @@
 
     // Відписка, щоб сервіс не тримав посилання на вже знищений компонент.
     public void Dispose() => Order.Changed -= Refresh;
+
+    private string? jsError;
+
+    // Рішення про видалення ухвалює C#; JS лише показує стандартний діалог браузера.
+    private async Task ConfirmRemoveAsync(OrderLine item)
+    {
+        jsError = null;
+        try
+        {
+            await using var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/orderTools.js");
+            if (await module.InvokeAsync<bool>("confirmRemoval", item.YachtName))
+                Order.Remove(item.Id);
+        }
+        catch (JSDisconnectedException) { }
+        catch (JSException) { jsError = "Не вдалося відкрити підтвердження. Позицію не видалено."; }
+    }
 }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="YachtCatalog.MainPage"
+             Title="Яхт-чартер «Вітрило»"
+             BackgroundColor="{StaticResource PageBackground}">
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="18"
+                             MaximumWidthRequest="560"
+                             HorizontalOptions="Fill">
+            <Label Text="⛵ Яхт-чартер «Вітрило»"
+                   Style="{StaticResource HeadingLabel}" />
+            <Label Text="Оберіть тривалість оренди й розрахуйте вартість."
+                   TextColor="{StaticResource MutedColor}" />
+
+            <Border BackgroundColor="{StaticResource CardBackground}"
+                    Stroke="#C9DCE6" Padding="20">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="18" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="12">
+                    <Image x:Name="ProductImage" HeightRequest="180"
+                           Aspect="AspectFit"
+                           SemanticProperties.Description="Вітрильна яхта з білим і жовтим вітрилами на морі" />
+                    <!-- Зміна компонування: підзаголовок категорії та ціна над описом -->
+                    <Label Text="ВІТРИЛЬНА ЯХТА · 4 КАЮТИ"
+                           FontSize="13" FontAttributes="Bold"
+                           TextColor="{StaticResource SecondaryColor}" />
+                    <Label x:Name="ProductNameLabel"
+                           FontSize="24" FontAttributes="Bold" />
+                    <Label x:Name="PriceLabel"
+                           FontSize="20" FontAttributes="Bold"
+                           TextColor="{StaticResource AccentColor}" />
+                    <Label x:Name="DescriptionLabel"
+                           TextColor="{StaticResource MutedColor}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Grid ColumnDefinitions="*,100" ColumnSpacing="12">
+                <Label Text="Кількість діб (1–14)" VerticalOptions="Center" />
+                <Entry x:Name="QuantityEntry" Grid.Column="1"
+                       Text="1" Keyboard="Numeric" MaxLength="6"
+                       HorizontalTextAlignment="Center"
+                       TextChanged="OnInputsChanged"
+                       SemanticProperties.Description="Кількість діб оренди" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                <CheckBox x:Name="OptionCheckBox"
+                          CheckedChanged="OnInputsChanged" />
+                <Label x:Name="OptionLabel" Grid.Column="1"
+                       VerticalOptions="Center" />
+            </Grid>
+            <!-- Зміна компонування: дві кнопки в Grid з двома стовпцями -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Button Text="Розрахувати"
+                        Clicked="OnCalculateClicked" />
+                <Button Grid.Column="1" Text="Скинути вибір"
+                        Clicked="OnResetClicked"
+                        BackgroundColor="#D6EAF2"
+                        TextColor="{StaticResource AccentColor}" />
+            </Grid>
+            <Label x:Name="ErrorLabel" IsVisible="False"
+                   TextColor="{StaticResource ErrorColor}" />
+            <Label x:Name="ResultLabel"
+                   FontSize="22" FontAttributes="Bold" />
+            <Label Text="Це попередній розрахунок, а не оформлене бронювання."
+                   FontSize="14" TextColor="{StaticResource MutedColor}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

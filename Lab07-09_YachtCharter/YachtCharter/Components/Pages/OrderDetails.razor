@@ -23,6 +23,8 @@ else
         </ul>
         <p class="review-total">Разом: <MoneyLabel Amount="order.Total" /></p>
         <p>Замовлення збережено. Оплата не проводилася.</p>
+        <LiveOrderStatus @key="order.Id" CreatedUtc="order.CreatedUtc" />
+        <OrderTools @key="order.Id" Summary="@($"Яхт-чартер «Вітрило» — замовлення №{order.Id}, яхт: {order.Items.Sum(i => i.Quantity)}, {order.Total:N2} грн. Оплати не було.")" />
         @if (!string.IsNullOrEmpty(order.CustomerName))
         {
             <h2>Клієнт і прибуття</h2>
