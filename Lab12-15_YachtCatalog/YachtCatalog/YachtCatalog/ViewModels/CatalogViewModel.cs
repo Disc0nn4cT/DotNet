@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Text.Json;
 using YachtCatalog.Infrastructure;
 using YachtCatalog.Models;
 using YachtCatalog.Services;
@@ -16,6 +17,21 @@ public sealed class CatalogViewModel : ObservableObject
 
     public AsyncCommand SaveSelectionCommand { get; }
     public AsyncCommand OpenSavedCommand { get; }
+
+    private readonly CatalogApiClient _api;
+    private CancellationTokenSource? _request;
+    public AsyncCommand LoadCatalogCommand { get; }
+    public DelegateCommand CancelLoadCommand { get; }
+    private bool _isLoading;
+    public bool IsLoading
+    {
+        get => _isLoading;
+        private set { if (SetProperty(ref _isLoading, value)) RefreshCommands(); }
+    }
+    private string _apiPath = "api/products";
+    public string ApiPath { get => _apiPath; set => SetProperty(ref _apiPath, value ?? ""); }
+    private string _networkStatus = "Локальний каталог. Натисніть «Завантажити з API».";
+    public string NetworkStatus { get => _networkStatus; private set => SetProperty(ref _networkStatus, value); }
 
     private Product? _selectedProduct;
     public Product? SelectedProduct
@@ -84,8 +100,11 @@ public sealed class CatalogViewModel : ObservableObject
     public string QuantityHint => $"Кількість діб (1–{Product.MaxQuantity})";
     public string ProductCountText => $"Яхт у каталозі: {Products.Count}";
 
-    public CatalogViewModel(SelectionStore store)
+    public CatalogViewModel(SelectionStore store, CatalogApiClient api)
     {
+        _api = api;
+        LoadCatalogCommand = new AsyncCommand(LoadCatalogAsync, ex => NetworkStatus = ex.Message);
+        CancelLoadCommand = new DelegateCommand(() => _request?.Cancel(), () => IsLoading);
         SaveSelectionCommand = new AsyncCommand(async () =>
         {
             if (SelectedProduct is not { } product) return;
@@ -93,14 +112,14 @@ public sealed class CatalogViewModel : ObservableObject
             { ErrorMessage = "Введіть ціле число діб від 1 до 14."; return; }
             await store.SaveAsync(SavedSelection.FromProduct(product, qty, IncludeOption));
             await Shell.Current.GoToAsync("saved");
-        }, ex => ErrorMessage = $"Не вдалося зберегти вибір: {ex.Message}", () => HasSelection);
+        }, ex => ErrorMessage = $"Не вдалося зберегти вибір: {ex.Message}", () => HasSelection && !IsLoading);
         OpenSavedCommand = new AsyncCommand(() => Shell.Current.GoToAsync("saved"),
             ex => ErrorMessage = ex.Message);
-        CalculateCommand = new DelegateCommand(Calculate, () => HasSelection);
-        ResetCommand = new DelegateCommand(Reset, () => HasSelection);
-        RemoveSelectedCommand = new DelegateCommand(RemoveSelected, () => HasSelection);
+        CalculateCommand = new DelegateCommand(Calculate, () => HasSelection && !IsLoading);
+        ResetCommand = new DelegateCommand(Reset, () => HasSelection && !IsLoading);
+        RemoveSelectedCommand = new DelegateCommand(RemoveSelected, () => HasSelection && !IsLoading);
         AddDemoProductCommand = new DelegateCommand(AddDemoProduct,
-            () => Products.All(product => product.Id != 4));
+            () => !IsLoading && Products.All(product => product.Id != 4));
 
         Products.CollectionChanged += (_, _) =>
         {
@@ -189,6 +208,38 @@ public sealed class CatalogViewModel : ObservableObject
             SelectedProduct = Products[Math.Min(index, Products.Count - 1)];
     }
 
+    private async Task LoadCatalogAsync()
+    {
+        string endpoint = ApiPath.Trim();
+        if (endpoint is not ("api/products" or "api/empty" or "api/error" or "api/invalid" or "api/slow"))
+        { NetworkStatus = "Оберіть один із демонстраційних маршрутів API."; return; }
+        using var request = new CancellationTokenSource();
+        _request = request;
+        IsLoading = true;
+        NetworkStatus = "Завантаження каталогу… Попередні дані залишаються на екрані.";
+        try
+        {
+            var rows = await _api.GetProductsAsync(endpoint, request.Token);
+            request.Token.ThrowIfCancellationRequested();
+            SelectedProduct = null;
+            Products.Clear();
+            foreach (var row in rows) Products.Add(row);
+            SelectedProduct = Products.FirstOrDefault();
+            NetworkStatus = $"Каталог із API · яхт: {Products.Count} · ціни в гривнях";
+        }
+        catch (OperationCanceledException) when (request.IsCancellationRequested)
+        { NetworkStatus = "Запит скасовано. Попередній каталог залишено."; }
+        catch (OperationCanceledException)
+        { NetworkStatus = "Сервер не відповів за 10 секунд. Попередній каталог залишено."; }
+        catch (HttpRequestException ex)
+        { NetworkStatus = ex.StatusCode is { } code
+            ? $"API повернув HTTP {(int)code}. Попередній каталог залишено."
+            : "Не вдалося зв’язатися з API. Перевірте сервер і мережу. Попередній каталог залишено."; }
+        catch (JsonException)
+        { NetworkStatus = "Некоректні дані API. Попередній каталог залишено."; }
+        finally { _request = null; IsLoading = false; }
+    }
+
     private void RefreshCommands()
     {
         SaveSelectionCommand.NotifyCanExecuteChanged();
@@ -196,5 +247,6 @@ public sealed class CatalogViewModel : ObservableObject
         ResetCommand.NotifyCanExecuteChanged();
         RemoveSelectedCommand.NotifyCanExecuteChanged();
         AddDemoProductCommand.NotifyCanExecuteChanged();
+        CancelLoadCommand.NotifyCanExecuteChanged();
     }
 }

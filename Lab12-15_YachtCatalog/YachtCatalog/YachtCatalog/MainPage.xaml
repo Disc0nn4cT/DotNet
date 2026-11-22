@@ -6,15 +6,16 @@
              xmlns:converters="clr-namespace:YachtCatalog.Converters"
              x:Class="YachtCatalog.MainPage"
              x:DataType="vm:CatalogViewModel"
-             Title="Яхт-чартер «Вітрило» · SQLite"
+             Title="Яхт-чартер «Вітрило» · REST API"
              BackgroundColor="{StaticResource PageBackground}">
     <ContentPage.Resources>
         <converters:HasTextConverter x:Key="HasText" />
+        <converters:NotBoolConverter x:Key="NotBool" />
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Змінити акцент" Clicked="OnAccentClicked" />
     </ContentPage.ToolbarItems>
-    <Grid Padding="20" RowDefinitions="Auto,170,*" RowSpacing="12"
+    <Grid Padding="20" RowDefinitions="Auto,Auto,170,*" RowSpacing="12"
           MaximumWidthRequest="680" HorizontalOptions="Fill">
         <VerticalStackLayout Spacing="6">
             <Label Text="⛵ Яхт-чартер «Вітрило»" Style="{StaticResource HeadingLabel}" />
@@ -27,14 +28,24 @@
             </Grid>
         </VerticalStackLayout>
 
-        <CollectionView Grid.Row="1" ItemsSource="{Binding Products}"
+        <VerticalStackLayout Grid.Row="1" Spacing="6">
+            <Label Text="{Binding NetworkStatus}" FontSize="14" />
+            <Entry Text="{Binding ApiPath, Mode=TwoWay}" IsEnabled="{Binding IsLoading, Converter={StaticResource NotBool}}"
+                   SemanticProperties.Description="Маршрут демонстраційного API" />
+            <Grid ColumnDefinitions="*,*,Auto" ColumnSpacing="8">
+                <Button Text="Завантажити з API" Command="{Binding LoadCatalogCommand}" />
+                <Button Grid.Column="1" Text="Скасувати запит" Command="{Binding CancelLoadCommand}" />
+                <ActivityIndicator Grid.Column="2" IsRunning="{Binding IsLoading}" />
+            </Grid>
+        </VerticalStackLayout>
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Products}"
                         SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
                         SelectionMode="Single">
             <CollectionView.ItemsLayout>
                 <LinearItemsLayout Orientation="Horizontal" ItemSpacing="12" />
             </CollectionView.ItemsLayout>
             <CollectionView.EmptyView>
-                <Label Text="Каталог порожній. Додайте яхту «Хвиля»."
+                <Label Text="Каталог порожній. Завантажте інший каталог або додайте «Хвилю»."
                        VerticalOptions="Center" HorizontalOptions="Center" />
             </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
@@ -73,7 +84,7 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <ScrollView Grid.Row="2">
+        <ScrollView Grid.Row="3">
             <VerticalStackLayout Spacing="12">
                 <Border BackgroundColor="{StaticResource CardBackground}"
                         Stroke="#C9DCE6" Padding="18">

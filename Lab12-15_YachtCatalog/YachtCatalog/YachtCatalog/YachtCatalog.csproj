@@ -10,7 +10,7 @@
     <Nullable>enable</Nullable>
     <MauiVersion>10.0.110</MauiVersion>
     <ApplicationTitle>Яхт-чартер «Вітрило»</ApplicationTitle>
-    <ApplicationId>ua.edu.lntu.glukhmaniuk.yachtcatalog.lab14</ApplicationId>
+    <ApplicationId>ua.edu.lntu.glukhmaniuk.yachtcatalog.lab15</ApplicationId>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
     <WindowsPackageType>None</WindowsPackageType>
