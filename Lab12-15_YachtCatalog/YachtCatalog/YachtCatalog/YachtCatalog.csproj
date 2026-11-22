@@ -22,6 +22,9 @@
     <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#0B2F4A" BaseSize="128,128" />
     <MauiImage Include="Resources\Images\*" />
     <MauiImage Update="Resources\Images\albatross.svg" BaseSize="300,200" />
+    <MauiImage Update="Resources\Images\breeze.svg" BaseSize="300,200" />
+    <MauiImage Update="Resources\Images\dolphin.svg" BaseSize="300,200" />
+    <MauiImage Update="Resources\Images\wave.svg" BaseSize="300,200" />
     <MauiFont Include="Resources\Fonts\*" />
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
