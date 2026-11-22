@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:vm="clr-namespace:YachtCatalog.ViewModels"
+ x:Class="YachtCatalog.Pages.EditPage" x:DataType="vm:EditViewModel"
+ Title="Редагування оренди" BackgroundColor="{StaticResource PageBackground}">
+ <ScrollView><VerticalStackLayout Padding="24" Spacing="16" MaximumWidthRequest="680">
+  <Label Text="{Binding ProductName}" Style="{StaticResource HeadingLabel}" />
+  <Label Text="Кількість діб (1–14)" />
+  <Entry Text="{Binding QuantityText, Mode=TwoWay}" Keyboard="Numeric" IsEnabled="{Binding IsLoaded}" />
+  <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+   <CheckBox IsChecked="{Binding IncludeOption, Mode=TwoWay}" IsEnabled="{Binding IsLoaded}" />
+   <Label Grid.Column="1" Text="{Binding OptionName}" VerticalOptions="Center" />
+  </Grid>
+  <Label Text="Примітка до оренди (дата, марина, побажання) (до 200 символів)" />
+  <Editor Text="{Binding Note, Mode=TwoWay}" HeightRequest="110" MaxLength="200" IsEnabled="{Binding IsLoaded}" />
+  <Label Text="{Binding Message}" />
+  <Button Text="Зберегти зміни" Command="{Binding SaveCommand}" />
+  <Label Text="Кнопка «Назад» скасовує незбережені зміни. Ціна є знімком ціни на момент збереження оренди." />
+ </VerticalStackLayout></ScrollView>
+</ContentPage>

@@ -10,7 +10,7 @@
     <Nullable>enable</Nullable>
     <MauiVersion>10.0.110</MauiVersion>
     <ApplicationTitle>Яхт-чартер «Вітрило»</ApplicationTitle>
-    <ApplicationId>ua.edu.lntu.glukhmaniuk.yachtcatalog</ApplicationId>
+    <ApplicationId>ua.edu.lntu.glukhmaniuk.yachtcatalog.lab14</ApplicationId>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
     <WindowsPackageType>None</WindowsPackageType>
@@ -29,6 +29,7 @@
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.12" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
   </ItemGroup>
 </Project>

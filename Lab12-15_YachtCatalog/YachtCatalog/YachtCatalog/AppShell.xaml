@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:local="clr-namespace:YachtCatalog"
-       x:Class="YachtCatalog.AppShell"
-       FlyoutBehavior="Disabled"
-       Shell.NavBarIsVisible="False">
-    <ShellContent Title="Каталог"
-                  Route="MainPage"
-                  ContentTemplate="{DataTemplate local:MainPage}" />
+ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+ x:Class="YachtCatalog.AppShell" FlyoutBehavior="Disabled"
+ Shell.BackgroundColor="#0B2F4A" Shell.TitleColor="White" Shell.ForegroundColor="White">
+ <ShellContent x:Name="CatalogContent" Title="Каталог" Route="catalog" />
 </Shell>

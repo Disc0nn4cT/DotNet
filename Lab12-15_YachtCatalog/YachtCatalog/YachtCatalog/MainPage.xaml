@@ -6,11 +6,14 @@
              xmlns:converters="clr-namespace:YachtCatalog.Converters"
              x:Class="YachtCatalog.MainPage"
              x:DataType="vm:CatalogViewModel"
-             Title="Яхт-чартер «Вітрило» · MVVM"
+             Title="Яхт-чартер «Вітрило» · SQLite"
              BackgroundColor="{StaticResource PageBackground}">
     <ContentPage.Resources>
         <converters:HasTextConverter x:Key="HasText" />
     </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Змінити акцент" Clicked="OnAccentClicked" />
+    </ContentPage.ToolbarItems>
     <Grid Padding="20" RowDefinitions="Auto,170,*" RowSpacing="12"
           MaximumWidthRequest="680" HorizontalOptions="Fill">
         <VerticalStackLayout Spacing="6">
@@ -106,7 +109,11 @@
                 <Label Text="{Binding ErrorMessage}" TextColor="{StaticResource ErrorColor}"
                        IsVisible="{Binding ErrorMessage, Mode=OneWay, Converter={StaticResource HasText}}" />
                 <Label Text="{Binding ResultText}" FontSize="22" FontAttributes="Bold" />
-                <Label Text="Це попередній розрахунок, а не бронювання. Зміни каталогу зберігаються лише до закриття застосунку."
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Button Text="Зберегти вибір" Command="{Binding SaveSelectionCommand}" />
+                    <Button Grid.Column="1" Text="Збережені оренди" Command="{Binding OpenSavedCommand}" />
+                </Grid>
+                <Label Text="Каталог — у пам’яті. Збережений вибір — у SQLite, навіть після перезапуску."
                        FontSize="14" TextColor="{StaticResource MutedColor}" />
             </VerticalStackLayout>
         </ScrollView>

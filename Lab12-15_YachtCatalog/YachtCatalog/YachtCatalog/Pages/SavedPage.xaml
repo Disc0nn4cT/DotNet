@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+ xmlns:vm="clr-namespace:YachtCatalog.ViewModels" xmlns:models="clr-namespace:YachtCatalog.Models"
+ x:Class="YachtCatalog.Pages.SavedPage" x:DataType="vm:SavedViewModel"
+ Title="Збережені оренди" BackgroundColor="{StaticResource PageBackground}">
+ <Grid Padding="20" RowDefinitions="Auto,Auto,*,Auto" RowSpacing="12" MaximumWidthRequest="680">
+  <VerticalStackLayout>
+   <Label Text="⛵ Збережені оренди" Style="{StaticResource HeadingLabel}" />
+   <Label Text="Ваші розрахунки оренди зберігаються у SQLite на цьому пристрої." />
+  </VerticalStackLayout>
+  <Label Grid.Row="1" Text="{Binding Message}" />
+  <CollectionView Grid.Row="2" ItemsSource="{Binding Items}" SelectedItem="{Binding Selected, Mode=TwoWay}" SelectionMode="Single">
+   <CollectionView.EmptyView><Label Text="Ще немає збережених оренд. Поверніться до каталогу та збережіть вибір." /></CollectionView.EmptyView>
+   <CollectionView.ItemTemplate>
+    <DataTemplate x:DataType="models:SavedSelection">
+     <Border Padding="16" Margin="0,5" BackgroundColor="{StaticResource CardBackground}" Stroke="#C9DCE6">
+      <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+      <VerticalStackLayout Spacing="5">
+       <Label Text="{Binding ProductName}" FontSize="22" FontAttributes="Bold" />
+       <Label Text="{Binding Summary}" FontSize="20" TextColor="{StaticResource AccentColor}" />
+       <Label Text="{Binding Details}" />
+       <Label Text="{Binding Note}" TextColor="{StaticResource MutedColor}" />
+      </VerticalStackLayout>
+     </Border>
+    </DataTemplate>
+   </CollectionView.ItemTemplate>
+  </CollectionView>
+  <Grid Grid.Row="3" ColumnDefinitions="*,*" ColumnSpacing="12">
+   <Button Text="Редагувати" Command="{Binding EditCommand}" />
+   <Button Grid.Column="1" Text="Видалити" Command="{Binding DeleteCommand}" BackgroundColor="#A13535" />
+  </Grid>
+ </Grid>
+</ContentPage>

@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using YachtCatalog.Infrastructure;
 using YachtCatalog.Models;
+using YachtCatalog.Services;
 
 namespace YachtCatalog.ViewModels;
 
@@ -12,6 +13,9 @@ public sealed class CatalogViewModel : ObservableObject
     public DelegateCommand ResetCommand { get; }
     public DelegateCommand AddDemoProductCommand { get; }
     public DelegateCommand RemoveSelectedCommand { get; }
+
+    public AsyncCommand SaveSelectionCommand { get; }
+    public AsyncCommand OpenSavedCommand { get; }
 
     private Product? _selectedProduct;
     public Product? SelectedProduct
@@ -80,8 +84,18 @@ public sealed class CatalogViewModel : ObservableObject
     public string QuantityHint => $"Кількість діб (1–{Product.MaxQuantity})";
     public string ProductCountText => $"Яхт у каталозі: {Products.Count}";
 
-    public CatalogViewModel()
+    public CatalogViewModel(SelectionStore store)
     {
+        SaveSelectionCommand = new AsyncCommand(async () =>
+        {
+            if (SelectedProduct is not { } product) return;
+            if (!int.TryParse(QuantityText, out int qty) || qty < 1 || qty > Product.MaxQuantity)
+            { ErrorMessage = "Введіть ціле число діб від 1 до 14."; return; }
+            await store.SaveAsync(SavedSelection.FromProduct(product, qty, IncludeOption));
+            await Shell.Current.GoToAsync("saved");
+        }, ex => ErrorMessage = $"Не вдалося зберегти вибір: {ex.Message}", () => HasSelection);
+        OpenSavedCommand = new AsyncCommand(() => Shell.Current.GoToAsync("saved"),
+            ex => ErrorMessage = ex.Message);
         CalculateCommand = new DelegateCommand(Calculate, () => HasSelection);
         ResetCommand = new DelegateCommand(Reset, () => HasSelection);
         RemoveSelectedCommand = new DelegateCommand(RemoveSelected, () => HasSelection);
@@ -177,6 +191,7 @@ public sealed class CatalogViewModel : ObservableObject
 
     private void RefreshCommands()
     {
+        SaveSelectionCommand.NotifyCanExecuteChanged();
         CalculateCommand.NotifyCanExecuteChanged();
         ResetCommand.NotifyCanExecuteChanged();
         RemoveSelectedCommand.NotifyCanExecuteChanged();
