@@ -61,4 +61,13 @@ public class YachtDraft
         7 => "7 діб",
         _ => $"{days} діб"
     };
+
+    // Зворотне перетворення тексту з OrderLine на варіант екіпажу (для перевірки на сервері).
+    public static CrewKind ParseCrew(string name) => name switch
+    {
+        "без шкіпера" => CrewKind.Bareboat,
+        "зі шкіпером" => CrewKind.Skipper,
+        "шкіпер і кок" => CrewKind.FullCrew,
+        _ => throw new ArgumentException("Невідомий варіант екіпажу.")
+    };
 }

@@ -1,0 +1,53 @@
+@page "/checkout"
+@inject OrderState Cart
+@inject PurchaseService Purchases
+@inject NavigationManager Navigation
+@inject ILogger<Checkout> Logger
+
+<PageTitle>Перевірка замовлення · Яхт-чартер «Вітрило»</PageTitle>
+<h1>Перевірка замовлення</h1>
+<p>Навчальне замовлення оренди без оплати. Форму покупця додамо в наступній роботі.</p>
+@if (Cart.Items.Count == 0)
+{
+    <p class="panel">Кошик порожній. <a href="/">Повернутися до каталогу</a></p>
+}
+else
+{
+    <div class="panel">
+        <OrderReview Items="Cart.Items" />
+        @if (error is not null) { <p role="alert" class="validation-message">@error</p> }
+        <button type="button" disabled="@isSubmitting" @onclick="PlaceOrderAsync">
+            @(isSubmitting ? "Збереження…" : "Зберегти замовлення")
+        </button>
+        <a class="back-link" href="/">Повернутися до каталогу</a>
+    </div>
+}
+
+@code {
+    private bool isSubmitting;
+    private string? error;
+
+    // Один ключ на екземпляр сторінки: повторна спроба не створить другий запис.
+    private readonly Guid requestId = Guid.NewGuid();
+
+    private async Task PlaceOrderAsync()
+    {
+        if (isSubmitting) return;
+        isSubmitting = true;
+        error = null;
+        try
+        {
+            var id = await Purchases.PlaceAsync(Cart.Items.ToArray(), requestId);
+            Cart.Clear();                          // тільки після успішного збереження
+            Navigation.NavigateTo($"/orders/{id}");
+        }
+        catch (ArgumentException ex) { error = ex.Message; }
+        catch (InvalidOperationException ex) { error = ex.Message; }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Помилка збереження замовлення");
+            error = "Не вдалося зберегти замовлення. Кошик не очищено. Спробуйте ще раз.";
+        }
+        finally { isSubmitting = false; }
+    }
+}

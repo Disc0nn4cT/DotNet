@@ -1,0 +1,16 @@
+<ul class="review-lines">
+    @foreach (var item in Items)
+    {
+        <li @key="item.Id">
+            <strong>@item.YachtName</strong>
+            <span>@YachtDraft.DaysText(item.Days) · @item.Crew · яхт: @item.Quantity</span>
+            <MoneyLabel Amount="item.Total" />
+        </li>
+    }
+</ul>
+<p class="review-total">Разом: <MoneyLabel Amount="Items.Sum(i => i.Total)" /></p>
+
+@code {
+    // Компонент лише показує позиції: не зберігає їх і не очищує кошик.
+    [Parameter, EditorRequired] public IReadOnlyList<OrderLine> Items { get; set; } = Array.Empty<OrderLine>();
+}

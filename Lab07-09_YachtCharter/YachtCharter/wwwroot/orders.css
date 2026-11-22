@@ -1,0 +1,19 @@
+/* ===== Лабораторна 9: перевірка, список і деталі замовлень ===== */
+.panel { background: #fff; border-radius: 10px; padding: 24px; margin: 20px 0; box-shadow: 0 3px 10px #0b2f4a22; border-top: 4px solid var(--sea, #1a6a8d); max-width: 850px; }
+.review-lines { list-style: none; padding: 0; margin: 0 0 8px; }
+.review-lines li { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px; padding: 14px 0; border-bottom: 1px solid #dbe6ee; }
+.review-lines li strong { color: var(--navy, #0b2f4a); min-width: 140px; }
+.review-lines li span { color: #4a5b69; flex: 1; }
+.review-total { font-size: 1.3rem; font-weight: 700; color: var(--navy, #0b2f4a); }
+.orders-list { max-width: 850px; }
+.order-card { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 16px; padding: 18px 24px; margin: 14px 0; }
+.order-card h2 { margin: 0; font-size: 1.2rem; }
+.order-card h2 a { color: var(--sea, #1a6a8d); }
+.order-card p { margin: 0; grid-column: 1; color: #5b6c79; font-size: .9rem; }
+.order-card strong { grid-column: 2; grid-row: 1 / span 2; font-size: 1.2rem; color: var(--navy, #0b2f4a); }
+.checkout-link { display: block; margin-top: 14px; text-align: center; background: var(--gold, #f2b84b); color: #3a2a00; }
+.checkout-link:hover { background: #f6ca70; }
+.back-link { display: inline-block; margin: 18px; color: var(--sea, #1a6a8d); font-weight: 700; }
+.validation-message { color: #9b1c1c; background: #fdecec; padding: 10px 14px; border-radius: 6px; }
+button:disabled { opacity: .55; cursor: not-allowed; }
+nav { flex-wrap: wrap; }

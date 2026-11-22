@@ -18,6 +18,12 @@ builder.Services.AddDbContextFactory<YachtDbContext>(options =>
 builder.Services.AddScoped<CatalogService>();
 builder.Services.AddScoped<OrderState>();
 
+// Каталог попередньої роботи не змінюємо. Замовлення мають окрему базу orders.db.
+var ordersPath = Path.Combine(builder.Environment.ContentRootPath, "orders.db");
+builder.Services.AddDbContextFactory<OrderDbContext>(options =>
+    options.UseSqlite($"Data Source={ordersPath}"));
+builder.Services.AddScoped<PurchaseService>();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -39,5 +45,12 @@ app.MapRazorComponents<App>()
 // Створення бази та початкове наповнення (seed) під час запуску.
 await SeedData.InitializeAsync(
     app.Services.GetRequiredService<IDbContextFactory<YachtDbContext>>());
+
+// Створення бази замовлень, якщо її ще немає (тестових замовлень не додаємо).
+await using (var ordersDb = await app.Services
+    .GetRequiredService<IDbContextFactory<OrderDbContext>>().CreateDbContextAsync())
+{
+    await ordersDb.Database.EnsureCreatedAsync();
+}
 
 app.Run();

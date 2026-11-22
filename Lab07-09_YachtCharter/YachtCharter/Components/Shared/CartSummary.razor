@@ -28,8 +28,9 @@
             <span>До сплати</span><strong><MoneyLabel Amount="Order.Total" /></strong>
         </div>
         <button type="button" class="secondary full-width" @onclick="Order.Clear">Очистити кошик</button>
+        <a class="button-link checkout-link" href="/checkout">Перевірити замовлення</a>
     }
-    <p class="cart-note">Навчальний кошик. Оплата та збереження замовлень не виконуються.</p>
+    <p class="cart-note">Кошик тимчасовий. Замовлення зберігається після підтвердження на окремій сторінці. Оплати немає.</p>
 </aside>
 
 @code {
